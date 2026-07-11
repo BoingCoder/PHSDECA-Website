@@ -1,82 +1,77 @@
-import { openingHours, socials } from '../../constants/index.js'
-import { useGSAP } from '@gsap/react'
-import { SplitText} from 'gsap/all';
+import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-const Contact = () => {
- 	useGSAP(() => {
-		const titleSplit = SplitText.create('#contact h2', { type: 'words' });
-		
-		const timeline = gsap.timeline({
-		 scrollTrigger: {
-			trigger: '#contact',
-			start: 'top center',
-		 },
-		 ease: "power1.inOut"
-		})
-	 
-	 timeline
-		.from(titleSplit.words, {
-		 opacity: 0, yPercent: 100, stagger: 0.02
-	 })
-		.from('#contact h3, #contact p', {
-			opacity: 0, yPercent: 100, stagger: 0.02
-	 })
-		.to('#f-right-leaf', {
-		 y: '-50', duration: 1, ease: 'power1.inOut'
-	 }).to('#f-left-leaf', {
-		 y: '-50', duration: 1, ease: 'power1.inOut'
-	 }, '<')
-	})
- 
- return (
-	<footer id="contact">
-	 <img src="/images/footer-right-leaf.png" alt="leaf-right" id="f-right-leaf" />
-	 <img src="/images/footer-left-leaf.png" alt="leaf-left" id="f-left-leaf" />
-	 
-	 <div className="content">
-		<h2>Where to Find Us</h2>
-		
-		<div>
-		 <h3>Visit Our Bar</h3>
-		 <p>456, Raq Blvd. #404, Los Angeles, CA 90210</p>
-		</div>
-		
-		<div>
-		 <h3>Contact Us</h3>
-		 <p>(555) 987-6543</p>
-		 <p>hello@jsmcocktail.com</p>
-		</div>
-		
-		<div>
-		 <h3>Open Every Day</h3>
-		 {openingHours.map((time) => (
-			<p key={time.day}>
-			 {time.day} : {time.time}
-			</p>
-		 ))}
-		</div>
-		
-		<div>
-		 <h3>Socials</h3>
-		 
-		 <div className="flex-center gap-5">
-			{socials.map((social) => (
-			 <a
-			 	key={social.name}
-				href={social.url}
-				target="_blank"
-				rel="noopener noreferrer"
-				aria-label={social.name}
-			 >
-				<img src={social.icon} />
-			 </a>
-			))}
-		 </div>
-		</div>
-	 </div>
-	</footer>
- )
-}
+import { advisor, officerTeam, socials } from '../../constants/index.js';
 
-export default Contact
+const Contact = () => {
+	useGSAP(() => {
+		gsap.from('#contact .contact-card, #contact .officer-card', {
+			opacity: 0,
+			y: 28,
+			duration: 0.7,
+			ease: 'power2.out',
+			stagger: 0.05,
+			scrollTrigger: {
+				trigger: '#contact',
+				start: 'top 70%',
+			},
+		});
+	});
+
+	return (
+		<footer id="contact" className="section contact-section">
+			<div className="section-kicker">
+				<span>05</span>
+				<p>reach out</p>
+			</div>
+
+			<div className="section-header">
+				<h2>Join, ask questions, or follow what the chapter is doing.</h2>
+			</div>
+
+			<div className="contact-grid">
+				<article className="contact-card">
+					<h3>Advisor</h3>
+					<p>{advisor.name}</p>
+					<a href={`mailto:${advisor.email}`}>{advisor.email}</a>
+				</article>
+
+				<article className="contact-card">
+					<h3>Next Meeting</h3>
+					<p>Date, time, and room to be announced.</p>
+					<span>Members can check this page for the latest update.</span>
+				</article>
+
+				<article className="contact-card">
+					<h3>Socials</h3>
+					<div className="social-links">
+						{socials.map((social) => (
+							<a
+								key={social.name}
+								href={social.url}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{social.name}
+							</a>
+						))}
+					</div>
+				</article>
+			</div>
+
+			<div className="officer-section">
+				<h3>Officer Team</h3>
+				<div className="officer-grid">
+					{officerTeam.map((officer) => (
+						<article className="officer-card" key={`${officer.role}-${officer.name}`}>
+							<p>{officer.role}</p>
+							<h4>{officer.name}</h4>
+						</article>
+					))}
+				</div>
+			</div>
+		</footer>
+	);
+};
+
+export default Contact;

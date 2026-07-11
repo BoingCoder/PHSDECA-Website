@@ -1,112 +1,68 @@
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { SplitText } from "gsap/all";
-import { useRef } from "react";
-import { useMediaQuery } from "react-responsive";
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+
+import { chapterPhotos } from '../../constants/index.js';
 
 const Hero = () => {
- const videoRef = useRef();
- 
- const isMobile = useMediaQuery({ maxWidth: 767 });
- 
- useGSAP(() => {
-	const heroSplit = new SplitText(".title", {
-	 type: "chars, words",
-	});
-	
-	const paragraphSplit = new SplitText(".subtitle", {
-	 type: "lines",
-	});
-	
-	// Apply text-gradient class once before animating
-	heroSplit.chars.forEach((char) => char.classList.add("text-gradient"));
-	
-	gsap.from(heroSplit.chars, {
-	 yPercent: 100,
-	 duration: 1.8,
-	 ease: "expo.out",
-	 stagger: 0.06,
-	});
-	
-	gsap.from(paragraphSplit.lines, {
-	 opacity: 0,
-	 yPercent: 100,
-	 duration: 1.8,
-	 ease: "expo.out",
-	 stagger: 0.06,
-	 delay: 1,
-	});
-	
-	gsap
-	.timeline({
-	 scrollTrigger: {
-		trigger: "#hero",
-		start: "top top",
-		end: "bottom top",
-		scrub: true,
-	 },
-	})
+	useGSAP(() => {
+		gsap.from('.hero-copy > *', {
+			opacity: 0,
+			y: 56,
+			duration: 1,
+			ease: 'power4.out',
+			stagger: 0.12,
+			delay: 1.35,
+		});
 
-	const startValue = isMobile ? "top 50%" : "center 60%";
-	const endValue = isMobile ? "120% top" : "bottom top";
-	
-	let tl = gsap.timeline({
-	 scrollTrigger: {
-		trigger: "video",
-		start: startValue,
-		end: endValue,
-		scrub: true,
-		pin: true,
-	 },
-	});
-	
-	videoRef.current.onloadedmetadata = () => {
-	 tl.to(videoRef.current, {
-		currentTime: videoRef.current.duration,
-	 });
-	};
- }, []);
- 
- return (
-	<>
-	 <section id="hero" className="noisy">
-		<h1 className="title">PHS DECA</h1>
-		
+		gsap.from('.hero-photo', {
+			opacity: 0,
+			clipPath: 'inset(100% 0 0 0)',
+			y: 42,
+			duration: 1.1,
+			ease: 'power4.out',
+			stagger: 0.08,
+			delay: 1.55,
+		});
 
-		
-		<div className="body">
-		 {/* <img src="/images/arrow.png" alt="arrow" className="arrow" /> */}
-		 
-		 <div className="content">
-			<div className="space-y-5 hidden md:block">
-			 <p>Compete. Lead. Succeed.</p>
-			 <p className="subtitle">
-				 Your DECA Journey<br /> Starts Here
-			 </p>
+		gsap.to('.hero-gallery', {
+			yPercent: -8,
+			ease: 'none',
+			scrollTrigger: {
+				trigger: '#home',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: true,
+			},
+		});
+	});
+
+	return (
+		<section id="home" className="hero-section noisy">
+			<div className="hero-shell">
+				<div className="hero-copy">
+					<p className="eyebrow">Parsippany High School</p>
+					<h1>Business leaders in motion.</h1>
+					<p className="hero-lede">
+						PHS DECA builds the confidence, clarity, and competitive edge students need
+						to present ideas that land.
+					</p>
+
+					<div className="hero-actions">
+						<a href="#events">View updates</a>
+						<a href="#contact">Join the Chapter</a>
+					</div>
+
+					<div className="hero-scroll">scroll down</div>
+				</div>
+
+				<div className="hero-gallery" aria-label="PHS DECA chapter photos">
+					<img className="hero-photo hero-main" src={chapterPhotos[0]} alt="PHS DECA members at a conference" />
+					<img className="hero-photo" src={chapterPhotos[1]} alt="PHS DECA members in professional dress" />
+					<img className="hero-photo" src={chapterPhotos[4]} alt="DECA award celebration" />
+				</div>
 			</div>
-			
-			<div className="view-cocktails">
-			 <p className="subtitle">
-				 “DECA challenged me to think bigger, lead with confidence,
-				 and compete at my best.” — PHS DECA Student
-			 </p>
-			 <a href="#art">View Events</a>
-			</div>
-		 </div>
-		</div>
-	 </section>
-	 
-	 <div className="video absolute inset-0">
-		<video
-		 ref={videoRef}
-		 muted
-		 playsInline
-		 preload="auto"
-		 src="/videos/output.mp4"
-		/>
-	 </div>
-	</>
- );
+		</section>
+	);
 };
 
 export default Hero;

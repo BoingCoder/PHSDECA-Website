@@ -1,42 +1,44 @@
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react'
+import { useGSAP } from '@gsap/react';
 
-import { navLinks } from '../../constants/index.js'
+import { navLinks } from '../../constants/index.js';
 
 const Navbar = () => {
- useGSAP(() => {
-	const navTween = gsap.timeline({
-	 scrollTrigger: {
-		trigger: 'nav',
-		start: 'bottom top'
-	 }
+	useGSAP(() => {
+		gsap.fromTo(
+			'nav',
+			{ backgroundColor: 'transparent' },
+			{
+				backgroundColor: '#07111fd9',
+				backdropFilter: 'blur(14px)',
+				duration: 0.6,
+				scrollTrigger: {
+					trigger: 'nav',
+					start: 'bottom top',
+					toggleActions: 'play none none reverse',
+				},
+			},
+		);
 	});
-	
-	navTween.fromTo('nav', { backgroundColor: 'transparent' }, {
-	 backgroundColor: '#00000050',
-	 backgroundFilter: 'blur(10px)',
-	 duration: 1,
-	 ease: 'power1.inOut'
-	});
- })
- 
- return (
-	<nav>
-	 <div>
-		<a href="#home" className="flex items-center gap-2">
-		 <img src="/images/logo.png" className="w-8 h-10" alt="logo" />
-		 <p>PHS DECA</p>
-		</a>
-		
-		<ul>
-		 {navLinks.map((link) => (
-			<li key={link.id}>
-			 <a href={`#${link.id}`}>{link.title}</a>
-			</li>
-		 ))}
-		</ul>
-	 </div>
-	</nav>
- )
-}
-export default Navbar
+
+	return (
+		<nav>
+			<div>
+				<a href="#home" className="flex items-center gap-3">
+					<img src="/images/logo.png" className="h-10 w-9 object-contain" alt="PHS DECA logo" />
+					<p>PHS DECA</p>
+				</a>
+
+				<ul>
+					{navLinks.map((link) => (
+						<li key={link.id}>
+							<a href={`#${link.id}`}>{link.title}</a>
+						</li>
+					))}
+				</ul>
+			</div>
+		</nav>
+	);
+};
+
+export default Navbar;

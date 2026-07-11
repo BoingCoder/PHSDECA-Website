@@ -1,13 +1,1311 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="PHS DECA chapter website with updates, experience highlights, focus areas, and contact information."
+		/>
+		<link rel="icon" type="image/png" href="/images/logo.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<title>PHS DECA</title>
+		<style>
+			:root {
+				--bg: #0b0b0b;
+				--blue: #185fa5;
+				--blue-light: #378add;
+				--text: #f1efe8;
+				--muted: rgba(241, 239, 232, 0.68);
+				--faint: rgba(241, 239, 232, 0.44);
+				--line: rgba(255, 255, 255, 0.12);
+				--panel: rgba(255, 255, 255, 0.035);
+				--display: "Archivo Black", Impact, sans-serif;
+				--sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html {
+				background: var(--bg);
+				scroll-behavior: auto;
+			}
+
+			body {
+				margin: 0;
+				background:
+					linear-gradient(180deg, rgba(24, 95, 165, 0.1), transparent 22rem),
+					var(--bg);
+				color: var(--text);
+				font-family: var(--sans);
+				font-size: 16px;
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+
+			body.is-loading {
+				overflow: hidden;
+			}
+
+			img {
+				display: block;
+				max-width: 100%;
+			}
+
+			figure {
+				margin: 0;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			button,
+			input,
+			textarea {
+				font: inherit;
+			}
+
+			::selection {
+				background: var(--blue);
+				color: var(--text);
+			}
+
+			.site-noise {
+				position: fixed;
+				inset: 0;
+				z-index: 0;
+				pointer-events: none;
+				background-image: url("/images/noise.png");
+				background-size: 220px;
+				opacity: 0.04;
+			}
+
+			.preloader {
+				position: fixed;
+				inset: 0;
+				z-index: 100;
+				display: grid;
+				grid-template-rows: 1fr auto;
+				padding: clamp(1.25rem, 4vw, 3rem);
+				background: var(--text);
+				color: var(--bg);
+				overflow: hidden;
+			}
+
+			.nav__inner,
+			.section-label,
+			.meta-row,
+			.hero__scroll {
+				font-size: 0.76rem;
+				font-weight: 600;
+				letter-spacing: 0.18em;
+				line-height: 1;
+				text-transform: uppercase;
+			}
+
+			.preloader__logo {
+				align-self: center;
+				justify-self: center;
+				display: inline-flex;
+				align-items: center;
+				grid-row: 1;
+				grid-column: 1;
+				font-size: clamp(2.1rem, 5.4vw, 6rem);
+				letter-spacing: 0.18em;
+				line-height: 1;
+			}
+
+			.preloader__word {
+				display: inline-flex;
+				gap: 0.02em;
+				overflow: hidden;
+			}
+
+			.preloader__letter {
+				display: inline-block;
+				transform-origin: center bottom;
+			}
+
+			.preloader__mark {
+				width: 2.35rem;
+				height: 2.35rem;
+				border: 1px solid currentColor;
+				border-radius: 50%;
+				object-fit: contain;
+				padding: 0.24rem;
+			}
+
+			.preloader__count {
+				align-self: end;
+				justify-self: end;
+				font-family: var(--display);
+				font-size: clamp(5rem, 18vw, 15rem);
+				letter-spacing: -0.03em;
+				grid-row: 1;
+				grid-column: 1;
+				line-height: 0.78;
+			}
+
+			.preloader__progress {
+				align-self: end;
+				grid-row: 2;
+				grid-column: 1;
+				width: 100%;
+				height: 8px;
+				overflow: hidden;
+				border-radius: 999px;
+				background: rgba(11, 11, 11, 0.22);
+			}
+
+			.preloader__progress-bar {
+				width: 0%;
+				height: 100%;
+				border-radius: inherit;
+				background: var(--blue);
+				transform-origin: left center;
+			}
+
+			.preloader__curtain {
+				position: absolute;
+				inset: auto 0 0;
+				height: 0%;
+				background: var(--blue);
+			}
+
+			.page-transition {
+				position: fixed;
+				inset: 0;
+				z-index: 120;
+				pointer-events: none;
+				background: var(--blue);
+				transform: translateY(100%);
+			}
+
+			body.is-transitioning {
+				overflow: hidden;
+			}
+
+			.site-header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 50;
+				width: 100%;
+				transition:
+					background 220ms ease,
+					border-color 220ms ease,
+					backdrop-filter 220ms ease;
+			}
+
+			.site-header.is-scrolled {
+				border-bottom: 1px solid var(--line);
+				background: rgba(11, 11, 11, 0.72);
+				backdrop-filter: blur(18px);
+			}
+
+			.nav__inner {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				align-items: center;
+				gap: clamp(1rem, 3vw, 2.5rem);
+				width: min(1440px, calc(100% - clamp(2rem, 6vw, 5rem)));
+				margin: 0 auto;
+				padding: 1rem 0;
+			}
+
+			.nav__brand,
+			.nav__links {
+				display: flex;
+				align-items: center;
+			}
+
+			.nav__brand {
+				gap: 0.82rem;
+				width: fit-content;
+			}
+
+			.nav__mark {
+				width: 3.15rem;
+				height: 3.15rem;
+				border: 0;
+				border-radius: 0;
+				object-fit: contain;
+				padding: 0;
+				background: transparent;
+				box-shadow: none;
+			}
+
+			.nav__brand span {
+				color: var(--text);
+				font-weight: 800;
+			}
+
+			.nav__links {
+				flex-wrap: wrap;
+				gap: clamp(1rem, 3vw, 2.2rem);
+				justify-content: flex-end;
+				justify-self: end;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+
+			.nav-link {
+				position: relative;
+				display: inline-flex;
+				padding: 0.3rem 0;
+				color: var(--muted);
+				transition: color 180ms ease;
+			}
+
+			.nav-link::after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				height: 1px;
+				content: "";
+				background: var(--blue-light);
+				transform: scaleX(0);
+				transform-origin: right;
+				transition: transform 220ms ease;
+			}
+
+			.nav-link:hover,
+			.nav-link:focus-visible {
+				color: var(--text);
+			}
+
+			.nav-link:hover::after,
+			.nav-link:focus-visible::after {
+				transform: scaleX(1);
+				transform-origin: left;
+			}
+
+			main {
+				position: relative;
+				z-index: 1;
+			}
+
+			.section,
+			.hero,
+			.contact {
+				position: relative;
+				width: min(1440px, calc(100% - clamp(2rem, 6vw, 5rem)));
+				margin: 0 auto;
+			}
+
+			.hero {
+				display: grid;
+				align-items: end;
+				min-height: 100svh;
+				padding: clamp(7rem, 11vw, 11rem) 0 clamp(1.25rem, 3vw, 2rem);
+			}
+
+			.hero__grid {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.4fr);
+				align-items: end;
+				gap: clamp(2rem, 7vw, 7rem);
+			}
+
+			.hero__eyebrow {
+				max-width: 36rem;
+				margin: 0 0 clamp(1rem, 3vw, 2rem);
+				color: var(--muted);
+				font-size: clamp(1rem, 1.6vw, 1.18rem);
+			}
+
+			.display {
+				margin: 0;
+				font-family: var(--display);
+				font-size: clamp(3rem, 10.4vw, 7.5rem);
+				font-weight: 400;
+				letter-spacing: -0.03em;
+				line-height: 0.88;
+			}
+
+			.display span,
+			.contact__headline span {
+				color: var(--blue-light);
+			}
+
+			.hero__side {
+				display: grid;
+				gap: 1.5rem;
+				padding-bottom: 0.45rem;
+			}
+
+			.hero__side p {
+				max-width: 23rem;
+				margin: 0;
+				color: var(--muted);
+				font-size: clamp(1rem, 1.3vw, 1.12rem);
+			}
+
+			.hero__scroll {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.55rem;
+				color: var(--faint);
+			}
+
+			.hero__scroll::after {
+				display: inline-block;
+				content: "↓";
+				color: var(--blue-light);
+				animation: scrollPulse 1.4s ease-in-out infinite;
+			}
+
+			@keyframes scrollPulse {
+				0%,
+				100% {
+					transform: translateY(-2px);
+				}
+
+				50% {
+					transform: translateY(5px);
+				}
+			}
+
+			.hero__strip {
+				display: grid;
+				grid-template-columns: 0.72fr 1.35fr 0.95fr;
+				gap: 0.75rem;
+				margin-top: clamp(3rem, 8vw, 7rem);
+			}
+
+			.image-reveal {
+				position: relative;
+				overflow: hidden;
+				border: 1px solid var(--line);
+				background: var(--panel);
+				clip-path: inset(0 0 0 0);
+				--cover-y: 0%;
+			}
+
+			.image-reveal::after {
+				position: absolute;
+				inset: 0;
+				z-index: 2;
+				content: "";
+				background: var(--blue);
+				transform: translateY(var(--cover-y));
+				transform-origin: top;
+			}
+
+			.image-reveal img {
+				width: 100%;
+				height: 100%;
+				min-height: clamp(14rem, 24vw, 23rem);
+				object-fit: cover;
+				filter: grayscale(0.92) contrast(1.08);
+				transform: scale(1.12);
+				transition:
+					filter 260ms ease,
+					transform 260ms ease;
+			}
+
+			.image-reveal:hover img {
+				filter: grayscale(0.1) contrast(1);
+			}
+
+			.section {
+				display: grid;
+				grid-template-columns: minmax(9rem, 0.28fr) minmax(0, 1fr);
+				gap: clamp(2rem, 7vw, 7rem);
+				padding: clamp(5rem, 12vw, 11rem) 0;
+				border-top: 1px solid var(--line);
+			}
+
+			.section-label {
+				position: sticky;
+				top: 6rem;
+				align-self: start;
+				display: flex;
+				align-items: center;
+				gap: 0.85rem;
+				color: var(--faint);
+				white-space: nowrap;
+			}
+
+			.section-label::after {
+				width: 2.5rem;
+				height: 1px;
+				content: "";
+				background: var(--line);
+			}
+
+			.section__content {
+				display: grid;
+				gap: clamp(2rem, 5vw, 4rem);
+			}
+
+			.section__intro {
+				display: grid;
+				grid-template-columns: minmax(0, 0.82fr) minmax(18rem, 0.42fr);
+				align-items: end;
+				gap: clamp(1.5rem, 5vw, 5rem);
+			}
+
+			.section-title {
+				max-width: 12ch;
+				margin: 0;
+				font-family: var(--display);
+				font-size: clamp(2.7rem, 7vw, 6.8rem);
+				font-weight: 400;
+				letter-spacing: -0.03em;
+				line-height: 0.92;
+			}
+
+			.section-copy {
+				margin: 0;
+				color: var(--muted);
+				font-size: clamp(1rem, 1.5vw, 1.15rem);
+			}
+
+			.about__media {
+				display: grid;
+				grid-template-columns: minmax(0, 1.12fr) minmax(16rem, 0.62fr);
+				gap: 0.75rem;
+			}
+
+			.about__media .image-reveal:first-child img {
+				min-height: clamp(28rem, 46vw, 38rem);
+			}
+
+			.about__notes {
+				display: grid;
+				gap: 0.75rem;
+			}
+
+			.stat-list {
+				display: grid;
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				gap: 1px;
+				padding: 0;
+				margin: 0;
+				background: var(--line);
+				list-style: none;
+			}
+
+			.stat-list li {
+				min-height: 12rem;
+				padding: 1.2rem;
+				background: var(--bg);
+			}
+
+			.stat-list b {
+				display: block;
+				margin-bottom: 2.25rem;
+				color: var(--faint);
+				font-size: 0.74rem;
+				font-weight: 600;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+			}
+
+			.stat-list strong {
+				display: block;
+				font-family: var(--display);
+				font-size: clamp(3.8rem, 8vw, 6.5rem);
+				font-weight: 400;
+				line-height: 0.85;
+			}
+
+			.stat-list span {
+				color: var(--muted);
+			}
+
+			.work-list {
+				display: grid;
+				gap: 1px;
+				padding: 0;
+				margin: 0;
+				background: var(--line);
+				list-style: none;
+			}
+
+			.work-card {
+				display: grid;
+				grid-template-columns: minmax(3rem, 0.13fr) minmax(0, 0.42fr) minmax(0, 1fr) auto;
+				align-items: center;
+				gap: clamp(1rem, 3vw, 3rem);
+				padding: clamp(1rem, 3vw, 1.7rem);
+				background: var(--bg);
+				transition:
+					background 200ms ease,
+					color 200ms ease,
+					transform 200ms ease;
+			}
+
+			.work-card:hover {
+				background: rgba(24, 95, 165, 0.16);
+			}
+
+			.work-card__number,
+			.work-card__meta,
+			.focus-card__number {
+				color: var(--faint);
+				font-size: 0.76rem;
+				font-weight: 600;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+			}
+
+			.work-card h3,
+			.focus-card h3 {
+				margin: 0;
+				font-family: var(--display);
+				font-size: clamp(1.55rem, 3.2vw, 3.2rem);
+				font-weight: 400;
+				letter-spacing: -0.02em;
+				line-height: 0.98;
+			}
+
+			.work-card p,
+			.focus-card p {
+				margin: 0;
+				color: var(--muted);
+			}
+
+			.work-card__arrow {
+				color: var(--blue-light);
+				font-size: 1.8rem;
+				line-height: 1;
+				transition: transform 180ms ease;
+			}
+
+			.work-card:hover .work-card__arrow {
+				transform: translate(0.35rem, -0.35rem);
+			}
+
+			.focus-grid {
+				display: grid;
+				grid-template-columns: repeat(4, minmax(0, 1fr));
+				gap: 1px;
+				padding: 0;
+				margin: 0;
+				background: var(--line);
+				list-style: none;
+			}
+
+			.focus-card {
+				display: grid;
+				align-content: space-between;
+				min-height: 21rem;
+				padding: 1.2rem;
+				background: var(--bg);
+			}
+
+			.focus-card__number {
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.focus-card__number::after {
+				width: 0.55rem;
+				height: 0.55rem;
+				margin-top: 0.15rem;
+				content: "";
+				border-radius: 50%;
+				background: var(--blue-light);
+				transform: scale(0.65);
+			}
+
+			.contact {
+				display: grid;
+				align-content: center;
+				min-height: 100svh;
+				padding: clamp(6rem, 12vw, 10rem) 0 clamp(2rem, 6vw, 4rem);
+				border-top: 1px solid var(--line);
+			}
+
+			.contact__inner {
+				display: grid;
+				grid-template-columns: minmax(0, 0.95fr) minmax(20rem, 0.38fr);
+				align-items: end;
+				gap: clamp(2rem, 7vw, 7rem);
+			}
+
+			.contact__headline {
+				max-width: 11ch;
+				margin: 0;
+				font-family: var(--display);
+				font-size: clamp(4rem, 12vw, 10rem);
+				font-weight: 400;
+				letter-spacing: -0.035em;
+				line-height: 0.82;
+			}
+
+			.contact__panel {
+				display: grid;
+				gap: 1.2rem;
+				color: var(--muted);
+			}
+
+			.cta-link {
+				display: inline-flex;
+				align-items: center;
+				width: fit-content;
+				gap: 0.8rem;
+				color: var(--text);
+				font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+				font-weight: 700;
+			}
+
+			.cta-link span {
+				display: grid;
+				place-items: center;
+				width: 3rem;
+				height: 3rem;
+				border: 1px solid var(--line);
+				border-radius: 50%;
+				color: var(--blue-light);
+				transition:
+					border-color 180ms ease,
+					transform 180ms ease;
+			}
+
+			.cta-link:hover span,
+			.cta-link:focus-visible span {
+				border-color: var(--blue-light);
+				transform: translate(0.25rem, -0.25rem);
+			}
+
+			.footer-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				margin-top: clamp(4rem, 8vw, 7rem);
+				padding-top: 1rem;
+				border-top: 1px solid var(--line);
+				color: var(--faint);
+			}
+
+			.meta-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.85rem;
+				color: var(--faint);
+			}
+
+			.reveal,
+			.reveal-child {
+				will-change: transform, opacity;
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				*,
+				*::before,
+				*::after {
+					scroll-behavior: auto !important;
+					transition-duration: 0.01ms !important;
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+				}
+
+				body.is-loading {
+					overflow: auto;
+				}
+
+				.preloader {
+					display: none;
+				}
+			}
+
+			@media (max-width: 1024px) {
+				.nav__inner {
+					grid-template-columns: auto 1fr;
+				}
+
+				.hero__grid,
+				.section,
+				.section__intro,
+				.about__media,
+				.contact__inner {
+					grid-template-columns: 1fr;
+				}
+
+				.section-label {
+					position: static;
+				}
+
+				.hero__side {
+					padding-bottom: 0;
+				}
+
+				.work-card {
+					grid-template-columns: minmax(2rem, 0.16fr) minmax(0, 1fr);
+				}
+
+				.work-card__meta,
+				.work-card__arrow {
+					grid-column: 2;
+				}
+
+				.focus-grid {
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+				}
+			}
+
+			@media (max-width: 700px) {
+				.nav__inner,
+				.section,
+				.hero,
+				.contact {
+					width: min(100% - 1.25rem, 1440px);
+				}
+
+				.nav__inner {
+					grid-template-columns: 1fr;
+				}
+
+				.nav__links {
+					justify-content: flex-start;
+				}
+
+				.display {
+					font-size: clamp(3.4rem, 17vw, 6rem);
+				}
+
+				.hero__strip,
+				.stat-list,
+				.focus-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.preloader {
+					padding: 1rem;
+				}
+
+				.footer-row {
+					align-items: flex-start;
+					flex-direction: column;
+				}
+
+				.preloader__count {
+					justify-self: start;
+				}
+
+				.section {
+					padding: 4.5rem 0;
+				}
+
+				.work-card {
+					grid-template-columns: 1fr;
+					min-height: 16rem;
+					align-items: start;
+				}
+
+				.work-card__meta,
+				.work-card__arrow {
+					grid-column: auto;
+				}
+
+				.focus-card {
+					min-height: 16rem;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-loading">
+		<div class="site-noise" aria-hidden="true"></div>
+		<div class="page-transition" aria-hidden="true"></div>
+
+		<div class="preloader" aria-hidden="true">
+			<div class="preloader__logo">
+				<span class="preloader__word" aria-label="PHS DECA">
+					<span class="preloader__letter">P</span>
+					<span class="preloader__letter">H</span>
+					<span class="preloader__letter">S</span>
+					<span class="preloader__letter">&nbsp;</span>
+					<span class="preloader__letter">D</span>
+					<span class="preloader__letter">E</span>
+					<span class="preloader__letter">C</span>
+					<span class="preloader__letter">A</span>
+				</span>
+			</div>
+			<div class="preloader__count">0%</div>
+			<div class="preloader__progress" aria-hidden="true">
+				<div class="preloader__progress-bar"></div>
+			</div>
+			<div class="preloader__curtain"></div>
+		</div>
+
+		<header class="site-header" data-header>
+			<nav class="nav__inner" aria-label="Primary navigation">
+				<a class="nav__brand" href="#home" aria-label="PHS DECA home">
+					<!-- Logo swap point: replace this source with your final mark. -->
+					<img class="nav__mark" src="/images/logo.png" alt="PHS DECA logo" />
+					<span>PHS DECA</span>
+				</a>
+				<ul class="nav__links">
+					<li><a class="nav-link" href="#about">About</a></li>
+					<li><a class="nav-link" href="#work">Work</a></li>
+					<li><a class="nav-link" href="/shop.html">Shop</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="top">
+			<section class="hero" id="home" aria-labelledby="hero-title">
+				<div class="hero__grid">
+					<div>
+						<p class="hero__eyebrow reveal">Parsippany High School DECA builds confident competitors, sharp presenters, and future-ready business leaders.</p>
+						<h1 class="display reveal" id="hero-title">Business leaders <span>in motion.</span></h1>
+					</div>
+					<div class="hero__side reveal">
+						<p>Competition training, chapter projects, and student leadership shaped through real-world business scenarios.</p>
+						<span class="hero__scroll">Scroll</span>
+					</div>
+				</div>
+				<div class="hero__strip" aria-label="Chapter photo highlights">
+					<!-- Photo swap points: replace these sources with your own hero/gallery images. -->
+					<figure class="image-reveal"><img data-speed="0.82" src="/images/IMG_3577.jpeg" alt="PHS DECA members at an event" /></figure>
+					<figure class="image-reveal"><img data-speed="0.68" src="/images/IMG_0465.jpeg" alt="PHS DECA chapter group photo" /></figure>
+					<figure class="image-reveal"><img data-speed="0.78" src="/images/image (5).png" alt="PHS DECA competition moment" /></figure>
+				</div>
+			</section>
+
+			<section class="section" id="about" aria-labelledby="about-title">
+				<div class="section-label reveal">01 — about</div>
+				<div class="section__content">
+					<div class="section__intro">
+						<h2 class="section-title reveal" id="about-title">A chapter built for applied ambition.</h2>
+						<p class="section-copy reveal">
+							PHS DECA gives students a place to practice marketing, finance, hospitality, management, and entrepreneurship before they step into competition rooms and career paths.
+						</p>
+					</div>
+					<div class="about__media">
+						<figure class="image-reveal"><img data-speed="0.74" src="/images/IMG_3690.jpeg" alt="Students gathered for a PHS DECA activity" /></figure>
+						<div class="about__notes">
+							<figure class="image-reveal"><img data-speed="0.88" src="/images/unnamed.jpg" alt="PHS DECA members at a chapter table" /></figure>
+							<ul class="stat-list reveal">
+								<li><b>01</b><strong>6</strong><span>career clusters</span></li>
+								<li><b>02</b><strong>10</strong><span>student officers</span></li>
+								<li><b>03</b><strong>1</strong><span>chapter team</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="work" aria-labelledby="work-title">
+				<div class="section-label reveal">02 — work</div>
+				<div class="section__content">
+					<div class="section__intro">
+						<h2 class="section-title reveal" id="work-title">Practice that turns into presence.</h2>
+						<p class="section-copy reveal">
+							Use these cards as editable placeholders for chapter achievements, officer initiatives, competition milestones, and upcoming experiences.
+						</p>
+					</div>
+					<ul class="work-list" aria-label="Chapter work and experience highlights">
+						<li class="work-card reveal-child">
+							<span class="work-card__number">01</span>
+							<h3>Competition prep</h3>
+							<p>Role-play rounds, presentation reps, written-event planning, and feedback loops before conference season.</p>
+							<span class="work-card__arrow" aria-hidden="true">↗</span>
+						</li>
+						<li class="work-card reveal-child">
+							<span class="work-card__number">02</span>
+							<h3>Chapter leadership</h3>
+							<p>Officer-led communications, recruitment, event coordination, fundraising, and member support.</p>
+							<span class="work-card__arrow" aria-hidden="true">↗</span>
+						</li>
+						<li class="work-card reveal-child">
+							<span class="work-card__number">03</span>
+							<h3>Community projects</h3>
+							<p>Business-minded projects that connect members with school culture and practical execution.</p>
+							<span class="work-card__arrow" aria-hidden="true">↗</span>
+						</li>
+						<li class="work-card reveal-child">
+							<span class="work-card__number">04</span>
+							<h3>Conference moments</h3>
+							<p>Regional and state event updates can live here with dates, outcomes, photos, and next steps.</p>
+							<span class="work-card__arrow" aria-hidden="true">↗</span>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section class="section" id="focus" aria-labelledby="focus-title">
+				<div class="section-label reveal">03 — focus</div>
+				<div class="section__content">
+					<div class="section__intro">
+						<h2 class="section-title reveal" id="focus-title">Skills with a visible edge.</h2>
+						<p class="section-copy reveal">
+							Each focus area is intentionally short so you can swap in exact chapter language, event names, or links later.
+						</p>
+					</div>
+					<ul class="focus-grid" aria-label="Skill focus areas">
+						<li class="focus-card reveal-child">
+							<span class="focus-card__number">01</span>
+							<div>
+								<h3>Pitch clarity</h3>
+								<p>Strong openings, structured arguments, and confident closing moments.</p>
+							</div>
+						</li>
+						<li class="focus-card reveal-child">
+							<span class="focus-card__number">02</span>
+							<div>
+								<h3>Market thinking</h3>
+								<p>Customer insight, positioning, promotion, and practical business judgment.</p>
+							</div>
+						</li>
+						<li class="focus-card reveal-child">
+							<span class="focus-card__number">03</span>
+							<div>
+								<h3>Team execution</h3>
+								<p>Planning, accountability, communication, and clean event follow-through.</p>
+							</div>
+						</li>
+						<li class="focus-card reveal-child">
+							<span class="focus-card__number">04</span>
+							<div>
+								<h3>Professional poise</h3>
+								<p>Presence, dress, timing, eye contact, and judge-ready delivery.</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section class="contact" id="contact" aria-labelledby="contact-title">
+				<div class="section-label reveal">04 — contact</div>
+				<div class="contact__inner">
+					<h2 class="contact__headline reveal" id="contact-title">Let's <span>talk.</span></h2>
+					<div class="contact__panel reveal">
+						<p>Questions about joining, competition prep, meetings, or chapter updates can start here.</p>
+						<a class="cta-link" href="mailto:akandil@pthsd.net">
+							Contact the chapter
+							<span aria-hidden="true">↗</span>
+						</a>
+						<div class="meta-row">
+							<a class="nav-link" href="https://www.instagram.com/parhighdeca/?hl=en" target="_blank" rel="noreferrer">Instagram</a>
+							<a class="nav-link" href="https://www.tiktok.com/@parhighdeca" target="_blank" rel="noreferrer">TikTok</a>
+						</div>
+					</div>
+				</div>
+				<div class="footer-row">
+					<span>PHS DECA</span>
+					<span>Parsippany High School</span>
+				</div>
+			</section>
+		</main>
+
+		<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+		<script>
+			/* Content customization starts in the HTML above:
+			 * - Replace /images/logo.png for your logo.
+			 * - Replace the /images/IMG_... paths for your own chapter photos.
+			 * - Edit the card text in the Work and Focus sections.
+			 */
+			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			const header = document.querySelector("[data-header]");
+			const preloader = document.querySelector(".preloader");
+			const counter = document.querySelector(".preloader__count");
+			const progressBar = document.querySelector(".preloader__progress-bar");
+			const pageTransition = document.querySelector(".page-transition");
+			const introStorageKey = "phs-deca-intro-played";
+			const navigationEntry = performance.getEntriesByType("navigation")[0];
+			const isReload =
+				navigationEntry?.type === "reload" ||
+				window.performance?.navigation?.type === 1;
+			const hasPlayedIntro = (() => {
+				try {
+					return sessionStorage.getItem(introStorageKey) === "true";
+				} catch {
+					return false;
+				}
+			})();
+			const shouldPlayIntro = !hasPlayedIntro || isReload;
+			const markIntroPlayed = () => {
+				try {
+					sessionStorage.setItem(introStorageKey, "true");
+				} catch {
+					/* sessionStorage can be unavailable in strict privacy contexts. */
+				}
+			};
+			const showPageWithoutIntro = () => {
+				document.body.classList.remove("is-loading");
+				if (preloader) preloader.style.display = "none";
+				document.querySelectorAll(".image-reveal").forEach((frame) => {
+					frame.style.setProperty("--cover-y", "-101%");
+				});
+				document.querySelectorAll(".image-reveal img").forEach((image) => {
+					image.style.transform = "scale(1)";
+				});
+			};
+
+			if (window.gsap && window.ScrollTrigger) {
+				gsap.registerPlugin(ScrollTrigger);
+			}
+
+			const updateHeader = () => {
+				header.classList.toggle("is-scrolled", window.scrollY > 24);
+			};
+
+			updateHeader();
+			window.addEventListener("scroll", updateHeader, { passive: true });
+
+			const shouldUsePageTransition = (link, event) => {
+				const href = link.getAttribute("href");
+
+				if (
+					!href ||
+					href.startsWith("#") ||
+					href.startsWith("mailto:") ||
+					href.startsWith("tel:") ||
+					link.target === "_blank" ||
+					link.hasAttribute("download") ||
+					event.defaultPrevented ||
+					event.button !== 0 ||
+					event.metaKey ||
+					event.ctrlKey ||
+					event.shiftKey ||
+					event.altKey
+				) {
+					return null;
+				}
+
+				const url = new URL(href, window.location.href);
+				const currentPath = window.location.pathname.replace(/\/$/, "");
+				const targetPath = url.pathname.replace(/\/$/, "");
+				const sameDocument =
+					url.origin === window.location.origin &&
+					targetPath === currentPath &&
+					url.search === window.location.search;
+
+				if (url.origin !== window.location.origin || url.href === window.location.href || (sameDocument && url.hash)) {
+					return null;
+				}
+
+				return url;
+			};
+
+			document.querySelectorAll("a[href]").forEach((link) => {
+				link.addEventListener("click", (event) => {
+					const url = shouldUsePageTransition(link, event);
+					if (!url) return;
+
+					event.preventDefault();
+					document.body.classList.add("is-transitioning");
+
+					const navigate = () => {
+						window.location.href = url.href;
+					};
+
+					if (prefersReducedMotion || !window.gsap) {
+						pageTransition.style.transform = "translateY(0%)";
+						window.setTimeout(navigate, 90);
+						return;
+					}
+
+					gsap.to(pageTransition, {
+						yPercent: 100,
+						duration: 0,
+					});
+					gsap.to(pageTransition, {
+						yPercent: 0,
+						duration: 0.52,
+						ease: "power3.inOut",
+						onComplete: navigate,
+					});
+				});
+			});
+
+			if (!prefersReducedMotion && window.Lenis && window.gsap && window.ScrollTrigger) {
+				const lenis = new Lenis({
+					duration: 1.05,
+					easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+					smoothWheel: true,
+				});
+
+				lenis.on("scroll", ScrollTrigger.update);
+
+				gsap.ticker.add((time) => {
+					lenis.raf(time * 1000);
+				});
+
+				gsap.ticker.lagSmoothing(0);
+
+				document.querySelectorAll('a[href^="#"]').forEach((link) => {
+					link.addEventListener("click", (event) => {
+						const target = document.querySelector(link.getAttribute("href"));
+						if (!target) return;
+						event.preventDefault();
+						lenis.scrollTo(target, { offset: -20 });
+					});
+				});
+			}
+
+			const revealPage = () => {
+				document.body.classList.remove("is-loading");
+				gsap.set(".hero .reveal", { opacity: 0, y: 40 });
+				gsap.timeline()
+					.to(".hero .reveal", {
+						opacity: 1,
+						y: 0,
+						duration: 0.72,
+						ease: "power3.out",
+						stagger: 0.1,
+					})
+					.to(
+						".hero .image-reveal",
+						{
+							"--cover-y": "-101%",
+							duration: 0.58,
+							ease: "power3.inOut",
+							stagger: 0.08,
+						},
+						"-=0.34",
+					)
+					.to(
+						".hero .image-reveal img",
+						{
+							scale: 1,
+							duration: 0.72,
+							ease: "power3.out",
+							stagger: 0.08,
+						},
+						"<",
+					);
+			};
+
+			if (prefersReducedMotion || !window.gsap) {
+				showPageWithoutIntro();
+				markIntroPlayed();
+			} else if (!shouldPlayIntro) {
+				preloader.style.display = "none";
+				revealPage();
+			} else {
+				const loadState = { value: 0 };
+				const updateLoadingUI = () => {
+					const percent = Math.round(loadState.value);
+					counter.textContent = `${percent}%`;
+					progressBar.style.width = `${percent}%`;
+				};
+
+				gsap.set(".preloader__letter", { yPercent: 120, opacity: 0, scale: 0.82 });
+
+				gsap.timeline({ defaults: { ease: "power3.out" } })
+					.to(loadState, {
+						value: 89,
+						duration: 1.35,
+						ease: "power2.out",
+						onUpdate: updateLoadingUI,
+					})
+					.to(
+						".preloader__letter",
+						{
+							yPercent: 0,
+							opacity: 1,
+							scale: 1,
+							duration: 0.72,
+							ease: "back.out(1.55)",
+							stagger: {
+								amount: 1.88,
+								from: "start",
+							},
+						},
+						"<",
+					)
+					.to(loadState, {
+						value: 100,
+						duration: 1.25,
+						ease: "power1.inOut",
+						onUpdate: updateLoadingUI,
+					})
+					.to(".preloader__curtain", {
+						height: "100%",
+						duration: 0.46,
+						ease: "power3.inOut",
+					})
+					.to(preloader, {
+						yPercent: -100,
+						duration: 0.62,
+						ease: "power4.inOut",
+						onComplete: () => {
+							markIntroPlayed();
+							preloader.style.display = "none";
+							revealPage();
+						},
+					});
+			}
+
+			if (!prefersReducedMotion && window.gsap && window.ScrollTrigger) {
+				gsap.utils.toArray(".section, .contact").forEach((section) => {
+					const items = section.querySelectorAll(".reveal, .reveal-child");
+					gsap.from(items, {
+						opacity: 0,
+						y: 40,
+						duration: 0.64,
+						ease: "power3.out",
+						stagger: 0.1,
+						scrollTrigger: {
+							trigger: section,
+							start: "top 72%",
+							once: true,
+						},
+					});
+				});
+
+				gsap.utils.toArray(".image-reveal").forEach((frame) => {
+					const image = frame.querySelector("img");
+
+					gsap.to(image, {
+						yPercent: -8,
+						ease: "none",
+						scrollTrigger: {
+							trigger: frame,
+							start: "top bottom",
+							end: "bottom top",
+							scrub: true,
+						},
+					});
+				});
+
+				ScrollTrigger.batch(".section .image-reveal", {
+					start: "top 78%",
+					once: true,
+					onEnter: (batch) => {
+						gsap.to(batch.map((el) => el.querySelector("img")), {
+							scale: 1,
+							duration: 0.7,
+							ease: "power3.out",
+							stagger: 0.08,
+						});
+						gsap.to(batch, {
+							"--cover-y": "-101%",
+							duration: 0.58,
+							ease: "power3.inOut",
+							stagger: 0.08,
+						});
+					},
+				});
+
+				gsap.to(".cta-link span", {
+					x: 5,
+					y: -5,
+					duration: 0.65,
+					ease: "power1.inOut",
+					repeat: -1,
+					yoyo: true,
+				});
+			}
+		</script>
+	</body>
 </html>

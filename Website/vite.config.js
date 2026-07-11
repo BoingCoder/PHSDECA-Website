@@ -14,6 +14,8 @@ export default defineConfig({
       input: {
         main: resolve(rootDir, 'index.html'),
         shop: resolve(rootDir, 'shop.html'),
+        events: resolve(rootDir, 'events.html'),
+        resources: resolve(rootDir, 'resources.html'),
       },
     },
   },

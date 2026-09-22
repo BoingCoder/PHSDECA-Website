@@ -56,9 +56,9 @@ const Hero = () => {
 				</div>
 
 				<div className="hero-gallery" aria-label="PHS DECA chapter photos">
-					<img className="hero-photo hero-main" src={chapterPhotos[0]} alt="PHS DECA members at a conference" />
-					<img className="hero-photo" src={chapterPhotos[1]} alt="PHS DECA members in professional dress" />
-					<img className="hero-photo" src={chapterPhotos[4]} alt="DECA award celebration" />
+					<img className="hero-photo hero-main" src={chapterPhotos[0]} alt="PHS DECA members gathered near a conference stage" />
+					<img className="hero-photo" src={chapterPhotos[1]} alt="PHS DECA members posing together during a chapter event" />
+					<img className="hero-photo" src={chapterPhotos[2]} alt="PHS DECA members at a conference" />
 				</div>
 			</div>
 		</section>

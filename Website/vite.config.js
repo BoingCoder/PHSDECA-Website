@@ -16,6 +16,8 @@ export default defineConfig({
         shop: resolve(rootDir, 'shop.html'),
         events: resolve(rootDir, 'events.html'),
         resources: resolve(rootDir, 'resources.html'),
+        join: resolve(rootDir, 'join.html'),
+        blueHour: resolve(rootDir, 'blue-hour.html'),
       },
     },
   },

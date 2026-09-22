@@ -31,7 +31,7 @@ body {
 	background: var(--black);
 	color: var(--paper);
 	font-family: var(--font-sans);
-	scroll-behavior: smooth;
+	scroll-behavior: auto;
 	overflow-x: hidden;
 }
 

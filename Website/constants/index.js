@@ -8,12 +8,18 @@ const navLinks = [
 ];
 
 const chapterPhotos = [
-	'/images/IMG_3577.jpeg',
-	'/images/IMG_0465.jpeg',
-	'/images/IMG_3690.jpeg',
-	'/images/unnamed.jpg',
-	'/images/image (5).png',
-	'/images/IMG_5827.JPG',
+	'/images/scdc/scdc-stage-audience.jpg',
+	'/images/scdc/scdc-group-selfie.jpg',
+	'/images/scdc/scdc-spotlight-frame.jpg',
+	'/images/scdc/scdc-stage-program.jpg',
+	'/images/scdc/scdc-chapter-portrait.jpg',
+	'/images/scdc/scdc-conference-portrait.jpg',
+	'/images/scdc/scdc-stage-recognition.jpg',
+	'/images/scdc/scdc-conference-selfie.jpg',
+	'/images/scdc/scdc-awards-lineup.jpg',
+	'/images/scdc/scdc-award-team.jpg',
+	'/images/scdc/scdc-team-awards.jpg',
+	'/images/scdc/scdc-member-team.jpg',
 ];
 
 const chapterStats = [
@@ -60,21 +66,21 @@ const merchItems = [
 	{
 		id: 1,
 		name: 'Chapter Tee',
-		image: '/images/logo.png',
+		image: chapterPhotos[8],
 		title: 'PHS DECA Spirit Wear',
 		description: 'A simple chapter shirt placeholder for future merch drops, pricing, and order links.',
 	},
 	{
 		id: 2,
 		name: 'Hoodie',
-		image: '/images/unnamed.jpg',
+		image: chapterPhotos[9],
 		title: 'Competition-Ready Merch',
 		description: 'Use this spot for hoodie mockups, order windows, and pickup details once available.',
 	},
 	{
 		id: 3,
 		name: 'Accessories',
-		image: '/images/IMG_0465.jpeg',
+		image: chapterPhotos[10],
 		title: 'Member Gear',
 		description: 'Add lanyards, stickers, or fundraiser items here as the chapter finalizes designs.',
 	},

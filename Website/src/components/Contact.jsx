@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
+import { chapterMailto } from '../../contact.js';
 import { advisor, officerTeam, socials } from '../../constants/index.js';
 
 const Contact = () => {
@@ -31,9 +32,10 @@ const Contact = () => {
 
 			<div className="contact-grid">
 				<article className="contact-card">
-					<h3>Advisor</h3>
-					<p>{advisor.name}</p>
-					<a href={`mailto:${advisor.email}`}>{advisor.email}</a>
+					<h3>Chapter email</h3>
+					<p>Questions go to the chapter team.</p>
+					<a href={chapterMailto()}>Email the chapter team</a>
+					<span>{advisor.name} is copied on each message.</span>
 				</article>
 
 				<article className="contact-card">

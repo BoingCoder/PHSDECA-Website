@@ -45,7 +45,7 @@ const Competitions = () => {
 				</div>
 
 				<div className="competition-feature">
-					<img src={chapterPhotos[4]} alt="DECA students celebrating an award" />
+					<img src={chapterPhotos[7]} alt="PHS DECA members posing together at a conference" />
 					<ul className="benefit-list">
 						{chapterBenefits.map((benefit) => (
 							<li key={benefit}>

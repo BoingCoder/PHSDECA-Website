@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger, SplitText } from 'gsap/all';
+import { useEffect } from 'react';
 
 import About from './components/About.jsx';
 import Competitions from './components/Competitions.jsx';
@@ -9,10 +10,13 @@ import Events from './components/Events.jsx';
 import Hero from './components/Hero.jsx';
 import Merch from './components/Merch.jsx';
 import Navbar from './components/Navbar.jsx';
+import { initSmoothScroll } from './smoothScroll.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const App = () => {
+	useEffect(() => initSmoothScroll({ onScroll: () => ScrollTrigger.update() }), []);
+
 	useGSAP(() => {
 		const loader = document.querySelector('.intro-loader');
 

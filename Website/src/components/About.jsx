@@ -45,9 +45,9 @@ const About = () => {
 			</div>
 
 			<div className="photo-grid reveal">
-				<img className="wide" src={chapterPhotos[2]} alt="PHS DECA students gathered at an event" />
-				<img src={chapterPhotos[3]} alt="PHS DECA recruitment table" />
-				<img src={chapterPhotos[5]} alt="PHS student at a school activity" />
+				<img className="wide" src={chapterPhotos[3]} alt="PHS DECA members preparing for competition" />
+				<img src={chapterPhotos[4]} alt="PHS DECA members on a conference stage" />
+				<img src={chapterPhotos[5]} alt="PHS DECA chapter portrait" />
 			</div>
 		</section>
 	);

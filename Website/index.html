@@ -3,107 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Parsippany High School DECA — competition, leadership, events, and chapter resources." />
+  <meta name="description" content="Parsippany High School DECA — join the chapter, prepare for competition, and follow upcoming NJ DECA dates." />
+  <meta name="theme-color" content="#080c14" />
   <link rel="icon" href="./images/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <script>try{if(sessionStorage.getItem('phs-deca-intro-played')!=='true')document.documentElement.classList.add('show-intro')}catch{document.documentElement.classList.add('show-intro')}</script>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Restore the curtain before the first paint, while page modules are still loading. -->
+  <script>try{if(sessionStorage.getItem('phs-deca-page-transition')==='true')document.documentElement.classList.add('is-page-arriving');if(sessionStorage.getItem('phs-deca-intro-played')!=='true')document.documentElement.classList.add('show-intro')}catch{document.documentElement.classList.add('show-intro')}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./site.css" />
-  <title>PHS DECA — Business Leaders in Motion</title>
+  <link rel="stylesheet" href="./src/prototypes/blue-hour.css" />
+  <title>PHS DECA — Parsippany High School</title>
 </head>
-<body class="is-loading">
+<body class="is-loading" data-page="home">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="site-noise" aria-hidden="true"></div>
   <div class="page-transition" aria-hidden="true"></div>
   <div class="preloader" aria-hidden="true">
-    <div class="preloader__logo"><span class="preloader__word">
-      <span class="preloader__letter">P</span><span class="preloader__letter">H</span><span class="preloader__letter">S</span><span class="preloader__letter">&nbsp;</span><span class="preloader__letter">D</span><span class="preloader__letter">E</span><span class="preloader__letter">C</span><span class="preloader__letter">A</span>
-    </span></div>
-    <div class="preloader__count">0%</div><div class="preloader__progress"><div class="preloader__progress-bar"></div></div><div class="preloader__curtain"></div>
+    <div class="preloader__logo"><span class="preloader__word"><span class="preloader__letter">P</span><span class="preloader__letter">H</span><span class="preloader__letter">S</span><span class="preloader__letter">&nbsp;</span><span class="preloader__letter">D</span><span class="preloader__letter">E</span><span class="preloader__letter">C</span><span class="preloader__letter">A</span></span></div>
+    <div class="preloader__count">0%</div>
+    <div class="preloader__progress"><div class="preloader__progress-bar"></div></div>
+    <div class="preloader__curtain"></div>
   </div>
 
-  <header class="site-header" data-header>
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="nav__brand magnetic" href="./index.html"><img class="nav__mark" src="./images/logo.png" alt="" /><span>PHS DECA</span></a>
-      <ul class="nav__links">
-        <li><a class="nav-link magnetic" aria-current="page" href="./index.html">Home</a></li>
-        <li><a class="nav-link magnetic" href="./events.html">Events</a></li>
-        <li><a class="nav-link magnetic" href="./resources.html">Resources</a></li>
-        <li><a class="nav-link magnetic" href="./shop.html">Shop</a></li>
-      </ul>
-    </nav>
-  </header>
+  <header class="site-header" data-site-header></header>
 
   <main id="main">
-    <section class="hero">
-      <div class="wrap">
-        <div class="hero__grid">
-          <div><p class="eyebrow hero-reveal">Parsippany High School · New Jersey</p><h1 class="display hero-reveal">Business leaders <span>in motion.</span></h1></div>
-          <div class="hero__side hero-reveal"><p>Practice the decision. Build the pitch. Step into competition with a chapter behind you.</p><div class="hero__actions"><a class="button button--solid magnetic" href="./resources.html">Start competing ↗</a><a class="button magnetic" href="#about">Meet the chapter</a></div></div>
-        </div>
-        <div class="hero__strip" aria-label="PHS DECA chapter photos">
-          <figure class="image-reveal"><img src="./images/IMG_3577.jpeg" alt="PHS DECA members together at a chapter event" /></figure>
-          <figure class="image-reveal"><img src="./images/IMG_0465.jpeg" alt="PHS DECA chapter group in professional attire" /></figure>
-          <figure class="image-reveal"><img src="./images/image (5).png" alt="PHS DECA members at competition" /></figure>
-        </div>
-      </div>
-    </section>
+    <div id="blue-hour-home" class="blue-hour-home">
+      <section id="home" class="journey" aria-label="PHS DECA — lead, compete, connect">
+        <div class="stage">
+          <div class="stage__atmosphere" aria-hidden="true"></div>
+          <div class="stage__scene" aria-hidden="true"><div class="fallback-diamond" aria-hidden="true"></div></div>
+          <div class="stage__vignette" aria-hidden="true"></div>
+          <div class="pose pose--hero">
+            <p class="eyebrow">Parsippany High School · New Jersey</p>
+            <h1><span>PHS</span><span>DECA</span></h1>
+            <p class="hero-line">Business, competition,<br class="mobile-break" /> and chapter life.</p>
+            <div class="pose__actions"><a class="action" href="./join.html">Join DECA <span>↗</span></a><a class="text-action" href="./events.html">View the calendar <span>↗</span></a></div>
+          </div>
 
-    <section class="section" id="about">
-      <div class="wrap section-grid">
-        <div class="section-label reveal">01 — About</div>
-        <div>
-          <div class="section-intro"><h2 class="section-title reveal">Applied ambition starts here.</h2><p class="section-copy reveal">PHS DECA is where students turn classroom ideas into clear decisions, confident presentations, and practical leadership. Members explore business through competitive events, chapter projects, and a team that keeps raising the bar.</p></div>
-          <div class="stats">
-            <div class="stat reveal-child"><span class="card-index">01</span><strong data-count="6">6</strong><span>career clusters</span></div>
-            <div class="stat reveal-child"><span class="card-index">02</span><strong data-count="3">3</strong><span>competition formats</span></div>
-            <div class="stat reveal-child"><span class="card-index">03</span><strong data-count="1">1</strong><span>chapter team</span></div>
+          <div class="pose pose--lead" aria-hidden="true" inert>
+            <p class="eyebrow">01 / Pick an event format</p>
+            <h2>Choose your<br /><em>event lane.</em></h2>
+            <p class="pose__copy">Compare role-plays, prepared events, and online simulations, then practice with a clear next step.</p>
+            <a class="text-action" href="./resources.html">Compare event formats <span>↗</span></a>
+          </div>
+
+          <div class="pose pose--connect" aria-hidden="true" inert>
+            <p class="eyebrow">02 / Join the chapter</p>
+            <h2>Join the<br /><em>PHS chapter.</em></h2>
+            <p class="pose__copy">Ask about eligibility, the next meeting, and the authorized resources members can use.</p>
+            <a class="text-action" href="./join.html">See how to join <span>↗</span></a>
+          </div>
+
+          <div class="stage__side" aria-hidden="true"><span>LEAD</span><span>COMPETE</span><span>CONNECT</span><i></i><span>READY FOR<br />THE NEXT EVENT.</span></div>
+          <div class="stage__footer">
+            <a class="scroll-cue" href="#about"><span class="scroll-cue__line"></span><span>SCROLL TO EXPLORE</span></a>
+            <div class="chapters" aria-hidden="true"><span class="is-active">01 <b>LEAD</b></span><span>02 <b>COMPETE</b></span><span>03 <b>CONNECT</b></span></div>
+            <button class="motion-toggle" type="button" aria-pressed="false">Pause motion <span aria-hidden="true">Ⅱ</span></button>
+          </div>
+          <div class="progress" aria-hidden="true"><div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <article class="editorial-home" aria-label="Explore PHS DECA">
+      <section class="editorial-intro" id="about">
+        <div class="wrap">
+          <div class="editorial-topline" data-reveal>
+            <span>01 / The chapter</span><span class="editorial-topline__rule" aria-hidden="true"></span><span>Parsippany · New Jersey</span>
+          </div>
+          <div class="editorial-intro__grid">
+            <h2 data-reveal>Bring the classroom<br /><em>into the room.</em></h2>
+            <div class="editorial-intro__copy" data-reveal>
+              <p class="editorial-kicker">What PHS DECA is</p>
+              <p>PHS DECA turns business concepts into a practice space: a place to test an idea, make a case, and learn how to present it with other people.</p>
+              <p>Members explore marketing, finance, hospitality, management, entrepreneurship, and personal financial literacy through eligible coursework and New Jersey DECA competition formats.</p>
+              <a class="editorial-link" href="./resources.html">See the event formats <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="editorial-intro__footer" data-reveal><span>LEAD / COMPETE / CONNECT</span><span>Scroll for the chapter record ↓</span></div>
+        </div>
+      </section>
+
+      <section class="editorial-entries" id="pathways">
+        <div class="wrap">
+          <div class="editorial-section-head" data-reveal>
+            <div><p class="editorial-kicker">02 / Your next move</p><h2>Start where<br /><em>you are.</em></h2></div>
+            <p>There is no single way into DECA. Follow the question you have today, then use the chapter pages to make the next one easier.</p>
+          </div>
+          <div class="entry-grid">
+            <a class="entry-card entry-card--blue" data-reveal href="./join.html">
+              <span class="entry-card__index">01</span><span class="entry-card__arrow" aria-hidden="true">↗</span>
+              <div><p class="entry-card__label">For the first question</p><h3>Join the<br />chapter.</h3><p>Check eligibility, the NJ dues breakdown, and the advisor-led registration step.</p></div>
+              <span class="entry-card__foot">Membership guide</span>
+            </a>
+            <a class="entry-card entry-card--cream" data-reveal href="./resources.html">
+              <span class="entry-card__index">02</span><span class="entry-card__arrow" aria-hidden="true">↗</span>
+              <div><p class="entry-card__label">For the curious</p><h3>Choose an<br />event lane.</h3><p>Compare role-plays, prepared events, and online simulations before you commit.</p></div>
+              <span class="entry-card__foot">Preparation resources</span>
+            </a>
+            <a class="entry-card entry-card--ink" data-reveal href="./events.html">
+              <span class="entry-card__index">03</span><span class="entry-card__arrow" aria-hidden="true">↗</span>
+              <div><p class="entry-card__label">For the next date</p><h3>Read the<br />calendar.</h3><p>Separate published NJ DECA dates from local PHS details still awaiting confirmation.</p></div>
+              <span class="entry-card__foot">Events and deadlines</span>
+            </a>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="experience">
-      <div class="wrap section-grid">
-        <div class="section-label reveal">02 — Experience</div>
-        <div>
-          <div class="section-intro"><h2 class="section-title reveal">Build skills you can show.</h2><p class="section-copy reveal">The chapter experience moves between fast thinking, long-form planning, team leadership, and service. Every lane develops a different part of your professional toolkit.</p></div>
-          <div class="card-grid">
-            <a class="card reveal-child" href="./resources.html"><span class="card-index">01</span><span class="card__arrow">↗</span><h3>Competition preparation</h3><p>Learn the format, practice performance indicators, rehearse delivery, and turn feedback into the next rep.</p></a>
-            <a class="card reveal-child" href="./events.html"><span class="card-index">02</span><span class="card__arrow">↗</span><h3>Chapter events</h3><p>Follow meetings, conferences, competitions, and community projects through an officer-friendly event log.</p></a>
-            <article class="card reveal-child"><span class="card-index">03</span><h3>Student leadership</h3><p>Officers and members plan communications, organize chapter work, support teammates, and build school spirit.</p></article>
-            <a class="card reveal-child" href="./shop.html"><span class="card-index">04</span><span class="card__arrow">↗</span><h3>Chapter identity</h3><p>Represent PHS DECA through chapter gear and fundraiser drops announced by the officer team.</p></a>
+      <section class="editorial-diary" id="people">
+        <div class="wrap">
+          <div class="editorial-section-head editorial-section-head--light" data-reveal>
+            <div><p class="editorial-kicker">03 / Chapter record</p><h2>The work has<br /><em>a face.</em></h2></div>
+            <p>Conference days, school outreach, and the space between events are all part of the chapter. These are the moments in the supplied photo record.</p>
+          </div>
+          <div class="diary-grid">
+            <figure class="diary-photo diary-photo--large" data-reveal data-editorial-motion="diary-large">
+              <div class="diary-photo__frame"><img src="./images/scdc/scdc-stage-audience.jpg" alt="PHS DECA members gathered near the stage during a conference" loading="lazy" decoding="async" width="3520" height="1980" /></div>
+              <figcaption><span>Conference day</span><span>01 / together</span></figcaption>
+            </figure>
+            <div class="diary-note" data-reveal data-editorial-motion="diary-note">
+              <p class="diary-note__mark">PHS<br />DECA</p>
+              <p>Confidence is not a claim on a page. It is the result of showing up, listening closely, and trying the response again.</p>
+              <a class="editorial-link editorial-link--light" href="./events.html">Follow the dates <span aria-hidden="true">↗</span></a>
+            </div>
+            <figure class="diary-photo diary-photo--small" data-reveal data-editorial-motion="diary-small">
+              <div class="diary-photo__frame"><img src="./images/scdc/scdc-group-selfie.jpg" alt="PHS DECA members posing together during a chapter event" loading="lazy" decoding="async" width="1170" height="1560" /></div>
+              <figcaption><span>School outreach</span><span>02 / share it</span></figcaption>
+            </figure>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="clusters">
-      <div class="wrap section-grid">
-        <div class="section-label reveal">03 — Focus</div>
-        <div>
-          <div class="section-intro"><h2 class="section-title reveal">Six clusters. Your direction.</h2><p class="section-copy reveal">DECA competitive events span six career clusters. Explore broadly, then choose a format and subject area that fits how you think and communicate.</p></div>
-          <ul class="cluster-list">
-            <li class="reveal-child"><b>01</b>Marketing</li><li class="reveal-child"><b>02</b>Finance</li><li class="reveal-child"><b>03</b>Hospitality &amp; Tourism</li><li class="reveal-child"><b>04</b>Business Management &amp; Administration</li><li class="reveal-child"><b>05</b>Entrepreneurship</li><li class="reveal-child"><b>06</b>Personal Financial Literacy</li>
-          </ul>
+      <section class="editorial-marquee" aria-label="PHS DECA values">
+        <div class="marquee-track" data-marquee><span>LEAD</span><i aria-hidden="true">✳</i><span>COMPETE</span><i aria-hidden="true">✳</i><span>CONNECT</span><i aria-hidden="true">✳</i><span>LEAD</span><i aria-hidden="true">✳</i><span>COMPETE</span><i aria-hidden="true">✳</i><span>CONNECT</span><i aria-hidden="true">✳</i></div>
+      </section>
+
+      <section class="editorial-rhythm" id="next">
+        <div class="wrap">
+          <div class="editorial-section-head" data-reveal>
+            <div><p class="editorial-kicker">04 / The rhythm</p><h2>Pick a thread.<br /><em>Keep moving.</em></h2></div>
+            <p>Use the pages below as a living route through the season: learn the format, find the date, and ask the advisor when the chapter record needs an update.</p>
+          </div>
+          <div class="program-list">
+            <a class="program-row" data-reveal href="./resources.html">
+              <span class="program-row__number">01</span><div><p class="program-row__eyebrow">The format</p><h3>Choose your event lane.</h3><p class="program-row__copy">Start with the kind of problem you want to solve, then compare what each event asks you to bring.</p></div><span class="program-row__cta">Open resources <b aria-hidden="true">↗</b></span>
+              <span class="program-row__image" aria-hidden="true"><img src="./images/scdc/scdc-spotlight-frame.jpg" alt="" loading="lazy" decoding="async" width="1560" height="1170" /></span>
+            </a>
+            <a class="program-row" data-reveal href="./events.html">
+              <span class="program-row__number">02</span><div><p class="program-row__eyebrow">The date</p><h3>Keep the calendar close.</h3><p class="program-row__copy">Check published NJ DECA deadlines first; local PHS details appear as the chapter confirms them.</p></div><span class="program-row__cta">Open events <b aria-hidden="true">↗</b></span>
+              <span class="program-row__image" aria-hidden="true"><img src="./images/scdc/scdc-stage-program.jpg" alt="" loading="lazy" decoding="async" width="3520" height="1980" /></span>
+            </a>
+            <a class="program-row" data-reveal href="./join.html">
+              <span class="program-row__number">03</span><div><p class="program-row__eyebrow">The people</p><h3>Ask the right first person.</h3><p class="program-row__copy">The joining guide points to the advisor for registration, eligibility, meeting details, and DECA+ access.</p></div><span class="program-row__cta">Meet the chapter <b aria-hidden="true">↗</b></span>
+              <span class="program-row__image" aria-hidden="true"><img src="./images/scdc/scdc-chapter-portrait.jpg" alt="" loading="lazy" decoding="async" width="1560" height="1170" /></span>
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="next">
-      <div class="wrap section-grid">
-        <div class="section-label reveal">04 — Next</div>
-        <div><div class="section-intro"><h2 class="section-title reveal">Know where to go next.</h2><p class="section-copy reveal">Current members can use the resources guide to understand event formats and reach official prep platforms. Prospective members and families can see the chapter in motion through recent events.</p></div><div class="card-grid"><a class="card reveal-child" href="./resources.html"><span class="card-index">Resources</span><span class="card__arrow">↗</span><h3>Choose your event lane</h3><p>Compare role-plays, written events, and online simulations before following official prep links.</p></a><a class="card reveal-child" href="./events.html"><span class="card-index">Events</span><span class="card__arrow">↗</span><h3>See what we've been doing</h3><p>Meeting notes, competition recaps, and community-project updates in one editable log.</p></a></div></div>
-      </div>
-    </section>
+      <section class="editorial-contact" aria-labelledby="contact-heading">
+        <div class="wrap editorial-contact__grid">
+          <div class="editorial-contact__photo" data-reveal data-editorial-motion="contact-photo"><img src="./images/scdc/scdc-conference-portrait.jpg" alt="PHS DECA members posing together at a conference" loading="lazy" decoding="async" width="1170" height="1560" /><span>Conference day · chapter photo record</span></div>
+          <div class="editorial-contact__copy" data-reveal data-editorial-motion="contact-copy">
+            <p class="editorial-kicker">05 / Make the next move</p><h2 id="contact-heading">Have a<br /><em>question?</em></h2>
+            <p>Ask about membership registration, competition eligibility, meetings, or the resources that fit your event. The chapter team can help with the next step.</p>
+            <a class="editorial-link editorial-link--light" href="mailto:amsussino27@pthsd.net,rcobeo27@pthsd.net,asaboualmaged27@pthsd.net,nvenkatiahgari27@pthsd.net,rarigor27@pthsd.net,snarayana27@pthsd.net?cc=akandil%40pthsd.net&amp;subject=PHS%20DECA%20question">Contact the chapter team <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+    </article>
   </main>
 
-  <footer class="contact" id="contact"><div class="wrap"><div class="section-label reveal">05 — Contact</div><div class="contact__grid"><h2 class="contact__headline reveal">Let's <span class="blue">talk.</span></h2><div class="reveal"><p class="section-copy">Questions about joining, meetings, competition, or chapter updates?</p><a class="button button--solid magnetic" href="mailto:akandil@pthsd.net">Email the chapter ↗</a><p><a class="text-link" target="_blank" rel="noreferrer" href="https://www.instagram.com/parhighdeca/?hl=en">Instagram ↗</a> &nbsp; <a class="text-link" target="_blank" rel="noreferrer" href="https://www.tiktok.com/@parhighdeca">TikTok ↗</a></p></div></div><div class="footer-row"><span>PHS DECA</span><span>Parsippany High School</span></div></div></footer>
+  <footer class="contact" data-site-footer></footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
   <script type="module" src="./site.js"></script>
+  <script type="module" src="./src/prototypes/blue-hour.js"></script>
 </body>
 </html>

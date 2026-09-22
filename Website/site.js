@@ -1,15 +1,17 @@
-/* global gsap, ScrollTrigger, Lenis */
+import { initSmoothScroll } from './src/smoothScroll.js';
+import { gsap, ScrollTrigger } from './src/motion.js';
+import { renderSiteChrome } from './src/siteChrome.js';
+
+renderSiteChrome();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 
-const header = $('[data-header]');
+const header = $('[data-site-header]');
 const updateHeader = () => header?.classList.toggle('is-scrolled', scrollY > 24);
 updateHeader();
 addEventListener('scroll', updateHeader, { passive: true });
-
-if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
 // Keep the original percentage intro, but play it only once in a browser session.
 const preloader = $('.preloader');
@@ -26,6 +28,8 @@ try {
 const curtain = $('.page-transition');
 if (arrivingFromPage && curtain) {
   curtain.style.transform = 'translateY(0)';
+  // Hand the first-paint CSS state to the animation without uncovering the page.
+  document.documentElement.classList.remove('is-page-arriving');
 
   if (reduced || !curtain.animate) {
     curtain.style.transform = 'translateY(-100%)';
@@ -48,6 +52,7 @@ if (arrivingFromPage && curtain) {
 // A page restored from the back-forward cache may retain the covered state.
 addEventListener('pageshow', (event) => {
   if (!event.persisted || !curtain) return;
+  document.documentElement.classList.remove('is-page-arriving');
   curtain.getAnimations().forEach((animation) => animation.cancel());
   curtain.style.transform = 'translateY(100%)';
   document.body.classList.remove('is-transitioning');
@@ -56,7 +61,7 @@ addEventListener('pageshow', (event) => {
 const revealHero = () => {
   document.documentElement.classList.remove('show-intro');
   document.body.classList.remove('is-loading');
-  if (reduced || !window.gsap) return;
+  if (reduced) return;
   gsap.from('.hero-reveal', { opacity: 0, y: 42, duration: .72, stagger: .09, ease: 'power3.out' });
   gsap.to('.hero .image-reveal', { '--cover-y': '-101%', duration: .6, stagger: .07, ease: 'power3.inOut' });
   gsap.to('.hero .image-reveal img', { scale: 1, duration: .8, stagger: .07, ease: 'power3.out' });
@@ -66,7 +71,7 @@ if (!preloader || reduced || played) {
   document.documentElement.classList.remove('show-intro');
   if (preloader) preloader.style.display = 'none';
   revealHero();
-} else if (window.gsap) {
+} else {
   const count = { value: 0 };
   gsap.set('.preloader__letter', { yPercent: 120, opacity: 0, scale: .82 });
   gsap.timeline()
@@ -86,10 +91,6 @@ if (!preloader || reduced || played) {
       preloader.style.display = 'none';
       revealHero();
     }});
-} else {
-  document.documentElement.classList.remove('show-intro');
-  preloader.style.display = 'none';
-  revealHero();
 }
 
 // Fast royal-blue curtain for internal page changes. Relative URLs keep GitHub Pages subpaths intact.
@@ -129,20 +130,9 @@ $$('a[href]').forEach((link) => link.addEventListener('click', (event) => {
   }
 }));
 
-if (!reduced && window.Lenis && window.gsap && window.ScrollTrigger) {
-  const lenis = new Lenis({ duration: 1, smoothWheel: true });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-  $$('a[href^="#"]').forEach((link) => link.addEventListener('click', (event) => {
-    const target = $(link.getAttribute('href'));
-    if (!target) return;
-    event.preventDefault();
-    lenis.scrollTo(target, { offset: -24 });
-  }));
-}
+initSmoothScroll({ onScroll: () => ScrollTrigger.update() });
 
-if (!reduced && window.gsap && window.ScrollTrigger) {
+if (!reduced) {
   $$('.section, .contact, .event-list, .resource-band, .marquee-stage').forEach((section) => {
     const items = $$('.reveal, .reveal-child', section);
     if (!items.length) return;
@@ -170,4 +160,96 @@ if (!reduced && window.gsap && window.ScrollTrigger) {
       item.addEventListener('pointerleave', () => gsap.to(item, { x: 0, y: 0, duration: .5, ease: 'elastic.out(1,.35)' }));
     });
   }
+}
+
+// The post-hero editorial layer has its own reveal rhythm. Keeping this below
+// the existing intro/hero flow means the protected opening never depends on
+// the homepage content being present or on a lower-page animation completing.
+const editorialHome = document.querySelector('.editorial-home');
+if (editorialHome && !reduced) {
+  $$('.editorial-home > section', document).forEach((section) => {
+    const items = $$('[data-reveal]:not([data-editorial-motion])', section);
+    if (!items.length) return;
+    gsap.from(items, {
+      opacity: 0,
+      y: 34,
+      duration: .82,
+      stagger: .08,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: section, start: 'top 78%', once: true },
+    });
+  });
+
+  $$('.diary-photo__frame, .editorial-contact__photo', editorialHome).forEach((frame) => {
+    const image = $('img', frame);
+    if (!image) return;
+    gsap.to(image, {
+      yPercent: -5,
+      ease: 'none',
+      scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+  });
+
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    $$('.program-row', editorialHome).forEach((row) => {
+      row.addEventListener('pointermove', (event) => {
+        const box = row.getBoundingClientRect();
+        row.style.setProperty('--pointer-x', `${event.clientX - box.left}px`);
+        row.style.setProperty('--pointer-y', `${event.clientY - box.top}px`);
+      });
+    });
+  }
+
+  const diary = $('.editorial-diary', editorialHome);
+  const diaryLarge = $('[data-editorial-motion="diary-large"] .diary-photo__frame', editorialHome);
+  const diaryNote = $('[data-editorial-motion="diary-note"]', editorialHome);
+  const diarySmall = $('[data-editorial-motion="diary-small"] .diary-photo__frame', editorialHome);
+  if (diary && diaryLarge && diaryNote && diarySmall) {
+    gsap.timeline({ scrollTrigger: { trigger: diary, start: 'top 72%', once: true } })
+      .fromTo(diaryLarge, { clipPath: 'inset(14% 0 0 0)', scale: 1.08 }, { clipPath: 'inset(0% 0 0 0)', scale: 1, duration: 1.05, ease: 'power3.out' })
+      .fromTo(diaryNote, { opacity: 0, x: 64 }, { opacity: 1, x: 0, duration: .72, ease: 'power3.out' }, .16)
+      .fromTo(diarySmall, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .78, ease: 'power3.inOut' }, .3);
+  }
+
+  const contact = $('.editorial-contact', editorialHome);
+  const contactPhoto = $('[data-editorial-motion="contact-photo"]', editorialHome);
+  const contactCopy = $('[data-editorial-motion="contact-copy"]', editorialHome);
+  if (contact && contactPhoto && contactCopy) {
+    gsap.timeline({ scrollTrigger: { trigger: contact, start: 'top 78%', once: true } })
+      .fromTo(contactPhoto, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .95, ease: 'power3.inOut' })
+      .fromTo(contactCopy, { opacity: 0, x: 70 }, { opacity: 1, x: 0, duration: .82, ease: 'power3.out' }, .18);
+  }
+
+  const marquee = $('.marquee-track', editorialHome);
+  if (marquee) {
+    editorialHome.classList.add('editorial-home--scripted');
+    gsap.fromTo(marquee, { xPercent: 0 }, {
+      xPercent: -28,
+      ease: 'none',
+      scrollTrigger: { trigger: marquee.parentElement, start: 'top bottom', end: 'bottom top', scrub: .8 },
+    });
+  }
+}
+
+// The smooth-scroll helper intentionally lands anchors a little above their
+// target. Nudge editorial anchors after the helper settles so a fixed header
+// never covers the new section's heading; this does not touch the protected
+// Blue Hour scene or its own scroll timeline.
+if (editorialHome) {
+  const editorialAnchors = $$('a[href="#about"], a[href="#pathways"], a[href="#people"], a[href="#next"]');
+  const settleEditorialAnchor = (target) => {
+    if (!target) return;
+    const headerHeight = header?.getBoundingClientRect().height || 0;
+    const safeTop = headerHeight + 16;
+    const delta = target.getBoundingClientRect().top - safeTop;
+    if (delta < 0) window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+  };
+  editorialAnchors.forEach((link) => {
+    link.addEventListener('click', () => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      requestAnimationFrame(() => requestAnimationFrame(() => settleEditorialAnchor(target)));
+      setTimeout(() => settleEditorialAnchor(target), 1500);
+    }, { capture: true });
+  });
 }

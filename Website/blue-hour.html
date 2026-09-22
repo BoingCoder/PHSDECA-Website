@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Blue Hour — a motion study for PHS DECA." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#080c14" />
+    <link rel="icon" href="./images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/prototypes/blue-hour.css" />
+    <title>Blue Hour — PHS DECA</title>
+  </head>
+  <body class="blue-hour-page">
+    <a class="skip" href="#chapter">Skip animation</a>
+    <div class="intro" aria-hidden="true">
+      <span class="intro__caption">PARSIPPANY HIGH SCHOOL</span>
+      <div class="intro__word">PHS DECA</div>
+      <div class="intro__bottom"><span>THE NEXT CHAPTER STARTS HERE.</span><span class="intro__count">0%</span></div>
+      <div class="intro__track"><div></div></div>
+    </div>
+
+    <header class="header">
+      <a class="brand" href="./index.html" aria-label="PHS DECA current homepage"><span class="brand__diamond" aria-hidden="true"></span>PHS DECA</a>
+      <nav aria-label="Primary navigation"><a href="./index.html" class="nav-home">Home</a><a href="./events.html">Events</a><a href="./resources.html">Resources</a><a href="./shop.html">Shop</a></nav>
+      <a class="join" href="./join.html">Join the chapter <span>↗</span></a>
+    </header>
+
+    <main class="blue-hour-home">
+      <section class="journey" aria-label="PHS DECA — lead, compete, connect">
+        <div class="stage">
+          <div class="stage__atmosphere" aria-hidden="true"></div>
+          <div class="stage__scene" aria-hidden="true"><div class="fallback-diamond" aria-hidden="true"></div></div>
+          <div class="stage__vignette" aria-hidden="true"></div>
+          <div class="stage__edition"><span class="status-dot"></span> BLUE HOUR <span class="edition-rule"></span> PHS / NJ</div>
+
+          <div class="pose pose--hero">
+            <p class="eyebrow">Parsippany High School · New Jersey</p>
+            <h1><span>PHS</span><span>DECA</span></h1>
+            <p class="hero-line">Business skills.<br class="mobile-break" /> Real confidence.</p>
+            <a class="action" href="./events.html">Explore events <span>↗</span></a>
+          </div>
+
+          <div class="pose pose--lead" aria-hidden="true" inert>
+            <p class="eyebrow">01 / A different perspective</p>
+            <h2>Built to<br /><em>stand out.</em></h2>
+            <p class="pose__copy">Find your voice. Make your case. Turn what you learn into something you can lead.</p>
+            <a class="text-action" href="./resources.html">Find your competitive event <span>↗</span></a>
+          </div>
+
+          <div class="pose pose--connect" aria-hidden="true" inert>
+            <p class="eyebrow">02 / More than business</p>
+            <h2>Your ambition.<br /><em>Our chapter.</em></h2>
+            <p class="pose__copy">Competition brings us together.<br />The people make it matter.</p>
+            <a class="text-action" href="#chapter">Meet PHS DECA <span>↓</span></a>
+          </div>
+
+          <div class="stage__side" aria-hidden="true"><span>LEAD</span><span>COMPETE</span><span>CONNECT</span><i></i><span>READY FOR<br />WHAT'S NEXT.</span></div>
+          <div class="stage__footer">
+            <a class="scroll-cue" href="#chapter"><span class="scroll-cue__line"></span><span>SCROLL TO EXPLORE</span></a>
+            <div class="chapters" aria-hidden="true"><span class="is-active">01 <b>LEAD</b></span><span>02 <b>COMPETE</b></span><span>03 <b>CONNECT</b></span></div>
+            <button class="motion-toggle" type="button" aria-pressed="false">Pause motion <span aria-hidden="true">Ⅱ</span></button>
+          </div>
+          <div class="progress" aria-hidden="true"><div></div></div>
+        </div>
+      </section>
+
+      <section class="chapter" id="chapter">
+        <div class="chapter__heading"><p class="eyebrow">THE PEOPLE BEHIND THE POSSIBILITIES</p><p class="chapter__number">01 — 03</p></div>
+        <h2>Big ideas.<br /><span>Better together.</span></h2>
+        <div class="chapter__grid">
+          <a class="chapter-card" href="./events.html"><div class="chapter-card__image"><img src="./images/optimized/phs-conference.jpg" alt="PHS DECA members at a chapter event" loading="lazy" /><span class="card-arrow">↗</span></div><div class="chapter-card__label"><span>01 / CHAPTER LIFE</span><h3>Follow the next date.</h3></div></a>
+          <a class="chapter-card" href="./resources.html"><div class="chapter-card__image"><img src="./images/optimized/phs-kean.jpg" alt="PHS DECA members in professional attire" loading="lazy" /><span class="card-arrow">↗</span></div><div class="chapter-card__label"><span>02 / COMPETITION</span><h3>Choose your event lane.</h3></div></a>
+          <a class="chapter-card" href="./shop.html"><div class="chapter-card__image"><img src="./images/optimized/phs-stage.jpg" alt="PHS DECA students together at competition" loading="lazy" /><span class="card-arrow">↗</span></div><div class="chapter-card__label"><span>03 / CHAPTER PRIDE</span><h3>Watch for confirmed goods.</h3></div></a>
+        </div>
+        <footer><a class="brand" href="./index.html">PHS DECA</a><span>BLUE HOUR / DESIGN STUDY</span><a href="#" class="back-top">Back to top ↑</a></footer>
+      </section>
+    </main>
+    <script type="module" src="./src/prototypes/blue-hour.js"></script>
+  </body>
+</html>

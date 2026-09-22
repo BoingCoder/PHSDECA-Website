@@ -1,15 +1,72 @@
-<!doctype html><html lang="en"><head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="description" content="PHS DECA chapter meetings, competitions, and community project recaps." />
-  <link rel="icon" href="./images/logo.png" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><script>try{if(sessionStorage.getItem('phs-deca-intro-played')!=='true')document.documentElement.classList.add('show-intro')}catch{document.documentElement.classList.add('show-intro')}</script><link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="./site.css" /><title>Chapter Events — PHS DECA</title>
-</head><body class="is-loading">
-  <a class="skip-link" href="#main">Skip to content</a><div class="site-noise" aria-hidden="true"></div><div class="page-transition" aria-hidden="true"></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Upcoming PHS DECA and New Jersey DECA dates, deadlines, and chapter photo recaps." />
+  <meta name="theme-color" content="#080c14" />
+  <link rel="icon" href="./images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Restore the curtain before the first paint, while page modules are still loading. -->
+  <script>try{if(sessionStorage.getItem('phs-deca-page-transition')==='true')document.documentElement.classList.add('is-page-arriving');if(sessionStorage.getItem('phs-deca-intro-played')!=='true')document.documentElement.classList.add('show-intro')}catch{document.documentElement.classList.add('show-intro')}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./site.css" />
+  <link rel="stylesheet" href="./inner-pages.css" />
+  <title>Events &amp; Calendar — PHS DECA</title>
+</head>
+<body class="is-loading inner-page" data-page="events">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-noise" aria-hidden="true"></div>
+  <div class="page-transition" aria-hidden="true"></div>
   <div class="preloader" aria-hidden="true"><div class="preloader__logo"><span class="preloader__word"><span class="preloader__letter">P</span><span class="preloader__letter">H</span><span class="preloader__letter">S</span><span class="preloader__letter">&nbsp;</span><span class="preloader__letter">D</span><span class="preloader__letter">E</span><span class="preloader__letter">C</span><span class="preloader__letter">A</span></span></div><div class="preloader__count">0%</div><div class="preloader__progress"><div class="preloader__progress-bar"></div></div><div class="preloader__curtain"></div></div>
-  <header class="site-header" data-header><nav class="nav" aria-label="Primary navigation"><a class="nav__brand magnetic" href="./index.html"><img class="nav__mark" src="./images/logo.png" alt="" /><span>PHS DECA</span></a><ul class="nav__links"><li><a class="nav-link magnetic" href="./index.html">Home</a></li><li><a class="nav-link magnetic" aria-current="page" href="./events.html">Events</a></li><li><a class="nav-link magnetic" href="./resources.html">Resources</a></li><li><a class="nav-link magnetic" href="./shop.html">Shop</a></li></ul></nav></header>
+
+  <header class="site-header" data-site-header></header>
+
   <main id="main">
-    <section class="page-hero hero"><div class="wrap"><p class="eyebrow hero-reveal">Chapter log · meetings · competition · service</p><h1 class="display hero-reveal">Moments worth <span>recording.</span></h1><p class="page-lede hero-reveal">A living archive of PHS DECA activity. Each entry pairs a chapter photo with a short recap, making it easy for members, families, and future officers to follow the work.</p></div></section>
-    <section class="section"><div class="wrap section-grid"><div class="section-label reveal">01 — Archive</div><div><p class="editor-note reveal">Officer edit note: update <strong>data/events.js</strong> to add an entry. The page layout and animations update automatically.</p><div class="event-list" data-event-list></div></div></div></section>
-    <section class="section"><div class="wrap section-grid"><div class="section-label reveal">02 — Next up</div><div class="section-intro"><h2 class="section-title reveal">Make the next recap yours.</h2><div class="reveal"><p class="section-copy">At the next meeting or conference, capture one strong photo, the exact date, and two sentences about what members practiced or accomplished.</p><a class="text-link" href="mailto:akandil@pthsd.net">Send a chapter update ↗</a></div></div></div></section>
+    <section class="page-hero hero events-hero"><div class="wrap events-hero__shell"><div class="events-hero__masthead"><div><p class="eyebrow hero-reveal">2026–27 calendar · published dates</p><h1 class="display hero-reveal">Next on the<br /><span>calendar.</span></h1></div><div class="events-hero__masthead-note hero-reveal"><span>Chapter dates / 01</span><p>Association dates are published; PHS meeting details stay pending until the chapter confirms them.</p></div></div><div class="events-hero__lower"><div class="events-hero__date-card hero-reveal" data-next-event-card></div><figure class="events-hero__photo hero-reveal"><img src="./images/scdc/scdc-stage-recognition.jpg" alt="PHS DECA member recognized on a conference stage" width="1440" height="1920" fetchpriority="high" /><figcaption><span>Conference stage</span>Keep the next move in view.</figcaption></figure><div class="events-hero__action hero-reveal"><span class="eyebrow">Local chapter note</span><p>For a PHS meeting, registration, or travel question, contact the advisor before making plans.</p><a class="button" href="./join.html">Join the chapter <span aria-hidden="true">↗</span></a></div></div></div></section>
+
+    <section class="section events-section">
+      <div class="wrap section-grid">
+        <div class="section-label reveal">01 — Calendar</div>
+        <div>
+          <div class="section-intro section-intro--compact">
+            <div><p class="eyebrow reveal">2026–27 calendar</p><h2 class="section-title reveal">Dates to put on your radar.</h2></div>
+            <p class="section-copy reveal">Select a date to see its details. Time and local participation appear only when published; contact the advisor before making plans.</p>
+          </div>
+          <div class="calendar-shell" data-event-calendar>
+            <div class="calendar-main">
+              <div class="calendar-toolbar">
+                <div><p class="calendar-overline">Browse by month</p><h3 class="calendar-month" id="calendar-month" data-calendar-month aria-live="polite"></h3></div>
+                <div class="calendar-controls" role="group" aria-label="Calendar navigation">
+                  <button class="calendar-control" type="button" data-calendar-prev aria-label="Previous month">←</button>
+                  <button class="calendar-control calendar-control--today" type="button" data-calendar-today>Today</button>
+                  <button class="calendar-control" type="button" data-calendar-next aria-label="Next month">→</button>
+                </div>
+              </div>
+              <div class="calendar-grid" data-calendar-grid role="grid" aria-labelledby="calendar-month" aria-label="Upcoming DECA dates"></div>
+              <div class="calendar-legend" role="group" aria-label="Calendar key">
+                <span><i class="calendar-marker calendar-marker--local"></i>PHS chapter</span>
+                <span><i class="calendar-marker calendar-marker--state"></i>NJ DECA</span>
+                <span><i class="calendar-marker calendar-marker--deadline"></i>Deadline</span>
+              </div>
+            </div>
+            <aside class="calendar-details" data-calendar-details aria-live="polite" aria-atomic="true"></aside>
+          </div>
+          <div class="calendar-undated" data-calendar-undated></div>
+          <p class="source-note reveal">Association dates are taken from the <a class="text-link--inline" href="https://njdeca.org/calendar/" target="_blank" rel="noopener noreferrer">NJ DECA 2026–27 calendar ↗</a>, which notes that dates may change.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section archive-section"><div class="wrap section-grid"><div class="section-label reveal">02 — Chapter archive</div><div><div class="section-intro section-intro--compact"><div><p class="eyebrow reveal">Moments from the chapter</p><h2 class="section-title reveal">Keep the work in view.</h2></div><p class="section-copy reveal">A small visual archive of moments from PHS DECA. Dates and captions stay specific to what the chapter has shared.</p></div><div class="archive-grid" data-past-list></div></div></div></section>
+
+    <section class="section section--quiet"><div class="wrap split-callout reveal"><div><p class="eyebrow">Have a confirmed update?</p><h2>Keep the calendar current.</h2></div><div><p>Send the exact event name, date, time, location, action, and one sentence of context to the chapter team.</p><a class="button" href="mailto:amsussino27@pthsd.net,rcobeo27@pthsd.net,asaboualmaged27@pthsd.net,nvenkatiahgari27@pthsd.net,rarigor27@pthsd.net,snarayana27@pthsd.net?cc=akandil%40pthsd.net&amp;subject=PHS%20DECA%20calendar%20update">Contact the chapter team <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
-  <footer class="contact"><div class="wrap"><div class="section-label reveal">03 — Explore</div><div class="contact__grid"><h2 class="contact__headline reveal">Keep <span class="blue">moving.</span></h2><div class="reveal"><a class="button button--solid magnetic" href="./resources.html">Competition resources ↗</a></div></div><div class="footer-row"><span>PHS DECA</span><span>Parsippany High School</span></div></div></footer>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script><script type="module" src="./events.js"></script><script type="module" src="./site.js"></script>
-</body></html>
+
+  <footer class="contact" data-site-footer></footer>
+  <script type="module" src="./events.js"></script>
+  <script type="module" src="./inner-pages.js"></script>
+  <script type="module" src="./site.js"></script>
+</body>
+</html>

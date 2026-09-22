@@ -34,7 +34,7 @@ const Events = () => {
 			</div>
 
 			<div className="events-layout">
-				<img src={chapterPhotos[3]} alt="PHS DECA table at a school event" />
+				<img src={chapterPhotos[6]} alt="PHS DECA member recognized on a conference stage" />
 
 				<div className="event-list">
 					{upcomingEvents.map((event, index) => (

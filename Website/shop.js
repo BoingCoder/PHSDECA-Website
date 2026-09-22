@@ -1,5 +1,4 @@
-/* global gsap */
-
+import { gsap } from './src/motion.js';
 import { products } from './data/products.js';
 
 const row = document.querySelector('[data-marquee-row]');
@@ -9,7 +8,7 @@ const set = (hidden = false) => `<div class="marquee-set"${hidden ? ' aria-hidde
 if (row) {
   row.innerHTML = `<div class="marquee-track">${set()}${set(true)}</div>`;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduced && window.gsap) {
+  if (!reduced) {
     const track = row.querySelector('.marquee-track');
     const firstSet = row.querySelector('.marquee-set');
     const state = { x: 0, speed: 42 };

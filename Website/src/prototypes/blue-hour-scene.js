@@ -68,10 +68,11 @@ function makeMetalTextures(renderer) {
   return { height, roughness };
 }
 
-export async function createSculpture({ host, stage, state, toggle, mobileQuery, reducedQuery, isPaused, onFailure }) {
+export async function createSculpture({ host, stage, state, toggle, mobileQuery, reducedQuery, chapter, isPaused, onFailure }) {
   const referenceTexture = await new THREE.TextureLoader().loadAsync(`${import.meta.env.BASE_URL}images/blue-hour-metal-reference.png`);
   referenceTexture.colorSpace = THREE.SRGBColorSpace;
-  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.setClearColor('#000000', 0);
   renderer.setPixelRatio(Math.min(devicePixelRatio, mobileQuery.matches ? 1.25 : 1.8));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   // The photograph already contains the intended exposure and color grading.
@@ -82,7 +83,8 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   canvas.setAttribute('role', 'button');
   canvas.setAttribute('aria-label', 'Twirl the DECA sculpture');
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#03070d');
+  // Leave the cream section visible through the very same canvas.
+  const heroEdge = { value: -1 };
   const camera = new THREE.PerspectiveCamera(34, 1, .1, 100);
   camera.position.set(0, .18, 11.8);
 
@@ -113,7 +115,13 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   rim.position.set(-4,2,-3); scene.add(rim);
   const fill = new THREE.DirectionalLight('#b8c8e3', .32);
   fill.position.set(-4,1,6); scene.add(fill);
-  scene.add(new THREE.HemisphereLight('#9bafcc', '#040916', .18));
+  const ambient = new THREE.HemisphereLight('#9bafcc', '#040916', .18);
+  scene.add(ambient);
+  const nightKey = key.color.clone(), dayKey = new THREE.Color('#fff5e7');
+  const nightRim = rim.color.clone(), dayRim = new THREE.Color('#e2e6eb');
+  const nightFill = fill.color.clone(), dayFill = new THREE.Color('#f4f1ea');
+  const nightSky = ambient.color.clone(), daySky = new THREE.Color('#ffffff');
+  const nightGround = ambient.groundColor.clone(), dayGround = new THREE.Color('#b9b1a2');
   RectAreaLightUniformsLib.init();
   const silverPanel = new THREE.RectAreaLight('#e5eeff', 3.5, 1.8, 4.5);
   const bluePanel = new THREE.RectAreaLight('#0864ff', 5, .45, 4);
@@ -133,12 +141,13 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   const body = new THREE.Mesh(frameGeometry, [referenceMaterial,face]);
   sculpture.add(body); scene.add(sculpture);
 
-  const backdropUniforms = { uTime: { value: 0 }, uAspect: { value: 1 }, uCenter: { value: .72 } };
+  const backdropUniforms = { uTime: { value: 0 }, uAspect: { value: 1 }, uCenter: { value: .72 }, uHeroEdge: heroEdge };
   const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(2,2), new THREE.ShaderMaterial({
     uniforms: backdropUniforms, depthTest: false, depthWrite: false,
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv; gl_Position=vec4(position.xy,.999,1.);}',
-    fragmentShader: `varying vec2 vUv; uniform float uTime,uAspect,uCenter; ${noiseGLSL}
+    fragmentShader: `varying vec2 vUv; uniform float uTime,uAspect,uCenter,uHeroEdge; ${noiseGLSL}
       void main(){
+        if(gl_FragCoord.y<uHeroEdge) discard;
         vec2 uv=vUv; vec2 p=vec2((uv.x-uCenter)*uAspect,uv.y-.38);
         vec2 drift=vec2(uTime*.009,-uTime*.006);
         vec2 warp=vec2(fbm(p*3.+drift),fbm(p*3.+8.7-drift));
@@ -168,6 +177,7 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
     color: { value: new THREE.Color('#09101d') }, tDiffuse: { value: null }, textureMatrix: { value: new THREE.Matrix4() },
     uContact: { value: new THREE.Vector2(2,0) }, uShadow: { value: 1 },
     uSlate: { value: null },
+    uHeroEdge: heroEdge,
   };
   const floor = new Reflector(new THREE.PlaneGeometry(80,24), {
     textureWidth: mobileQuery.matches ? 512 : 1536, textureHeight: mobileQuery.matches ? 512 : 1024,
@@ -177,9 +187,10 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
       vertexShader: `uniform mat4 textureMatrix; varying vec4 vMirror; varying vec3 vWorld;
         void main(){vMirror=textureMatrix*vec4(position,1.);vWorld=(modelMatrix*vec4(position,1.)).xyz;
           gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-      fragmentShader: `uniform sampler2D tDiffuse,uSlate; uniform vec2 uContact; uniform float uShadow;
+      fragmentShader: `uniform sampler2D tDiffuse,uSlate; uniform vec2 uContact; uniform float uShadow,uHeroEdge;
         varying vec4 vMirror; varying vec3 vWorld; ${noiseGLSL}
         void main(){
+          if(gl_FragCoord.y<uHeroEdge) discard;
           vec2 p=vWorld.xz;
           vec2 offset=p-uContact;
           float stone=fbm(p*vec2(3.,5.));
@@ -232,6 +243,7 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   floor.material.transparent = true;
   floor.material.depthWrite = false;
   floor.material.uniforms.uSlate.value = referenceTexture;
+  floor.material.uniforms.uHeroEdge = heroEdge;
   floor.frustumCulled = false;
   // Reflect the sculpture and lights, but not the screen-space atmosphere.
   const originalBeforeRender = floor.onBeforeRender;
@@ -243,12 +255,13 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   scene.add(floor);
 
   // Backlit, slowly curling smoke surrounds the aperture and the contact point.
-  const mistUniforms = { uTime: { value: 0 }, uIntensity: { value: .5 } };
+  const mistUniforms = { uTime: { value: 0 }, uIntensity: { value: .5 }, uHeroEdge: heroEdge };
   const mistMaterial = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, uniforms: mistUniforms,
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader: `varying vec2 vUv;uniform float uTime,uIntensity;${noiseGLSL}
+    fragmentShader: `varying vec2 vUv;uniform float uTime,uIntensity,uHeroEdge;${noiseGLSL}
       void main(){
+        if(gl_FragCoord.y<uHeroEdge) discard;
         vec2 p=vUv;
         vec2 drift=vec2(uTime*.012,-uTime*.008);
         float warp=fbm(p*vec2(5.,4.)+drift);
@@ -266,9 +279,12 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   mist.renderOrder = 1;
   scene.add(mist);
   const foregroundMist = new THREE.Mesh(new THREE.PlaneGeometry(8,1.2), mistMaterial.clone());
+  foregroundMist.material.uniforms.uHeroEdge = heroEdge;
   foregroundMist.material.uniforms.uIntensity.value = .055;
   foregroundMist.renderOrder = 2;
   scene.add(foregroundMist);
+
+
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene,camera));
@@ -286,9 +302,16 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   `;
   bloom.compositeMaterial.uniforms.bloomFactors.value = [1, .38, .12, .025, 0];
   bloom.bloomTintColors.forEach(color => color.set(.08,.38,1));
+  // Bloom must preserve the scene's alpha instead of painting a black rectangle
+  // over the page when the sculpture leaves its original dark background.
+  bloom.blendMaterial.blending = THREE.CustomBlending;
+  bloom.blendMaterial.blendSrc = THREE.OneFactor;
+  bloom.blendMaterial.blendDst = THREE.OneFactor;
+  bloom.blendMaterial.blendSrcAlpha = THREE.ZeroFactor;
+  bloom.blendMaterial.blendDstAlpha = THREE.OneFactor;
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
-  let viewWidth = 1, viewHeight = 1, elapsed = 0, previous = performance.now();
+  let viewWidth = 1, viewHeight = 1, pixelHeight = 1, elapsed = 0, previous = performance.now();
   let tiltX = 0, tiltY = 0, tiltZ = 0, followX = 0;
   let slideDistance = 0, slideReady = false;
   const slideGlideRate = 3.2;
@@ -316,6 +339,8 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   const interactionEuler = new THREE.Euler();
   const referenceViewYaw = Math.atan2(2*Math.tan(THREE.MathUtils.degToRad(17))*(1499/940)*referencePose.x,1);
   const frameVertices = body.geometry.getAttribute('position');
+  frameGeometry.computeBoundingBox();
+  frameGeometry.computeBoundingSphere();
   function hitsSculpture() {
     raycaster.setFromCamera(pointerPosition, camera);
     intersections.length = 0;
@@ -332,6 +357,15 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
     if (disposed) return;
     const delta = Math.min((time-previous)/1000,.05); previous = time;
     const moving = !isPaused() && !reducedQuery.matches;
+    const carrying = !!chapter && moving;
+    const chapterBounds = carrying ? chapter.getBoundingClientRect() : null;
+    const interacting = moving && (!chapterBounds || chapterBounds.top >= pixelHeight);
+    const daylight = 0;
+    heroEdge.value = chapterBounds ? (pixelHeight-chapterBounds.top)*renderer.getPixelRatio() : -1;
+    // Crop the entire canvas, including bloom, at the rising paper edge.
+    const covered = chapterBounds ? THREE.MathUtils.clamp(pixelHeight-chapterBounds.top,0,pixelHeight) : 0;
+    host.style.clipPath = carrying ? `inset(0 0 ${covered}px 0)` : '';
+    host.style.pointerEvents = interacting ? '' : 'none';
     if (moving) {
       elapsed += delta;
       twirlElapsed = Math.min(twirlElapsed + delta, twirlDuration);
@@ -340,12 +374,12 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
       twirlElapsed = twirlDuration;
       press = null;
     }
-    canvas.tabIndex = moving ? 0 : -1;
-    canvas.setAttribute('aria-disabled', String(!moving));
+    canvas.tabIndex = interacting ? 0 : -1;
+    canvas.setAttribute('aria-disabled', String(!interacting));
     const mobile = mobileQuery.matches;
     screenCenter.copy(sculpture.position).project(camera);
-    const aimX = moving && pointerActive ? THREE.MathUtils.clamp((pointerPosition.x-screenCenter.x)/.7,-1,1) : 0;
-    const aimY = moving && pointerActive ? THREE.MathUtils.clamp((pointerPosition.y-screenCenter.y)/.7,-1,1) : 0;
+    const aimX = interacting && pointerActive ? THREE.MathUtils.clamp((pointerPosition.x-screenCenter.x)/.7,-1,1) : 0;
+    const aimY = interacting && pointerActive ? THREE.MathUtils.clamp((pointerPosition.y-screenCenter.y)/.7,-1,1) : 0;
     // Follow the pointer with a little weight, consistently at any frame rate.
     tiltX = THREE.MathUtils.damp(tiltX,-aimY*.18,9,delta);
     tiltY = THREE.MathUtils.damp(tiltY,aimX*.3,9,delta);
@@ -392,6 +426,27 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
     sculpture.position.y = floor.position.y-tip.y+lift;
     floor.material.uniforms.uContact.value.set(tip.x,tip.z);
     floor.material.uniforms.uShadow.value = 1-lift*2;
+
+    const heroVisible = !chapterBounds || chapterBounds.top > 0;
+    backdrop.visible = floor.visible = mist.visible = foregroundMist.visible = heroVisible;
+    referenceMaterial.uniforms.uDaylight.value = daylight;
+    referenceMaterial.uniforms.uLighting.value = THREE.MathUtils.lerp(referenceMaterial.uniforms.uLighting.value,1.16,daylight);
+    key.color.copy(nightKey).lerp(dayKey,daylight);
+    key.intensity = THREE.MathUtils.lerp(1.2,2.2,daylight);
+    rim.color.copy(nightRim).lerp(dayRim,daylight);
+    rim.intensity = THREE.MathUtils.lerp(1.1,.35,daylight);
+    fill.color.copy(nightFill).lerp(dayFill,daylight);
+    fill.intensity = THREE.MathUtils.lerp(.32,1.05,daylight);
+    ambient.color.copy(nightSky).lerp(daySky,daylight);
+    ambient.groundColor.copy(nightGround).lerp(dayGround,daylight);
+    ambient.intensity = THREE.MathUtils.lerp(.18,.7,daylight);
+    scene.environmentIntensity = THREE.MathUtils.lerp(.65,1,daylight);
+    silverPanel.intensity = THREE.MathUtils.lerp(3.5,4.8,daylight);
+    bluePanel.intensity = THREE.MathUtils.lerp(5,.4,daylight);
+    mistUniforms.uIntensity.value = .5*(1-daylight*.85);
+    foregroundMist.material.uniforms.uIntensity.value = .055*(1-daylight);
+    bloom.strength = .2*(1-daylight);
+    bloom.enabled = daylight < 1;
     mist.position.set(sculpture.position.x-.3,floor.position.y+.95,-2.8);
     foregroundMist.position.set(sculpture.position.x-.25,floor.position.y+.35,1.8);
     foregroundMist.material.uniforms.uTime.value = elapsed+41;
@@ -403,10 +458,11 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
     bluePanel.position.set(sculpture.position.x-2.3,sculpture.position.y+.7,-2.2);
     bluePanel.lookAt(sculpture.position);
     composer.render();
-    setHovered(moving && pointerActive && pointerOnCanvas && hitsSculpture());
+    setHovered(interacting && pointerActive && pointerOnCanvas && hitsSculpture());
   }
   function resize() {
     const width = host.clientWidth, height = host.clientHeight;
+    pixelHeight = height;
     camera.aspect = width/height; camera.updateProjectionMatrix();
     renderer.setSize(width,height); composer.setSize(width,height);
     viewHeight = 2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.z;
@@ -476,8 +532,15 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   canvas.addEventListener('keydown',keyDown);
   toggle.addEventListener('click',resume);reducedQuery.addEventListener('change',resume);
   document.addEventListener('visibilitychange',resume);
-  const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)resume();});
+  const visibleSections = new Map();
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>visibleSections.set(entry.target,entry.isIntersecting));
+    visible=[...visibleSections.values()].some(Boolean);
+    host.style.visibility=visible ? '' : 'hidden';
+    if(visible)resume();
+  });
   observer.observe(stage);
+  if(chapter)observer.observe(chapter);
   const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(host);
   renderer.domElement.addEventListener('webglcontextlost',(event)=>{
     event.preventDefault();disposed=true;cancelAnimationFrame(frameId);host.setAttribute('aria-hidden','true');onFailure();
@@ -485,6 +548,7 @@ export async function createSculpture({ host, stage, state, toggle, mobileQuery,
   resize();host.classList.add('has-webgl');host.removeAttribute('aria-hidden');resume();
   return { render, dispose() {
     disposed=true;cancelAnimationFrame(frameId);observer.disconnect();resizeObserver.disconnect();
+    host.style.visibility='';host.style.pointerEvents='';host.style.clipPath='';
     stage.removeEventListener('pointermove',pointer);stage.removeEventListener('pointerleave',leave);
     canvas.removeEventListener('pointerdown',pointerDown);canvas.removeEventListener('pointerup',pointerUp);
     canvas.removeEventListener('pointercancel',leave);canvas.removeEventListener('pointerleave',leave);

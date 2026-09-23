@@ -9,6 +9,7 @@ const stopSmoothScroll = initSmoothScroll({ onScroll: () => ScrollTrigger.update
 const journey = document.querySelector('.journey');
 const stage = document.querySelector('.stage');
 const host = document.querySelector('.stage__scene');
+const chapter = document.querySelector('.editorial-intro');
 const poses = [...document.querySelectorAll('.pose')];
 const chapters = [...document.querySelectorAll('.chapters > span')];
 const toggle = document.querySelector('.motion-toggle');
@@ -39,6 +40,7 @@ function configureMotion() {
   animationContext?.revert();
   const staticMode = reducedQuery.matches || paused || sceneFailed;
   document.body.classList.toggle('static-motion', staticMode);
+  journey.closest('.blue-hour-home').classList.toggle('blue-hour-home--carry', !!chapter && !staticMode);
   toggle.setAttribute('aria-pressed', String(paused || reducedQuery.matches));
   toggle.innerHTML = staticMode ? 'Enable motion <span aria-hidden="true">▷</span>' : 'Pause motion <span aria-hidden="true">Ⅱ</span>';
   toggle.disabled = reducedQuery.matches || sceneFailed;
@@ -50,6 +52,32 @@ function configureMotion() {
     gsap.set(poses[0], { autoAlpha: 1, y: 0, pointerEvents: 'auto' });
     gsap.set(poses.slice(1), { autoAlpha: 0, y: 35, pointerEvents: 'none' });
     gsap.set('.progress > div', { scaleX: 0 });
+    // Text motion stays independent of WebGL availability and starts only
+    // when each actual line enters the viewport, rather than its padded section.
+    if (chapter && !reducedQuery.matches && !paused) {
+      document.querySelectorAll('.one-statement__mask').forEach((line, index) => {
+        const word = line.querySelector('.one-statement__word');
+        const lineMotion = gsap.timeline({
+          defaults: { duration: 1, ease: 'none' },
+          scrollTrigger: {
+            trigger: line,
+            start: 'top 90%',
+            end: 'top 30%',
+            scrub: .6,
+            invalidateOnRefresh: true,
+          },
+        });
+        lineMotion.fromTo(word,
+          { xPercent: index === 0 ? 10 : -12, y: 40, scale: .84 },
+          { xPercent: 0, y: 0, scale: 1 }, 0);
+        const accent = line.querySelector('em');
+        if (accent) {
+          lineMotion.fromTo(accent,
+            { rotation: -10, y: 16, transformOrigin: 'center bottom' },
+            { rotation: 0, y: 0 }, 0);
+        }
+      });
+    }
     if (staticMode) return;
     const setProgress = gsap.quickSetter('.progress > div', 'scaleX');
     const leadStart = 1.04, connectStart = 2.9;
@@ -107,7 +135,7 @@ mobileQuery.addEventListener('change', configureMotion);
 async function createScene() {
   const { createSculpture } = await import('./blue-hour-scene.js');
   const controller = await createSculpture({
-    host, stage, state, toggle, mobileQuery, reducedQuery,
+    host, stage, state, toggle, mobileQuery, reducedQuery, chapter,
     isPaused: () => paused,
     onFailure: useFallback,
   });
@@ -174,4 +202,4 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   mobileQuery.removeEventListener('change', configureMotion);
 });
 // A small diagnostic state for browser verification, with no UI dependency.
-Object.defineProperty(host, 'prototypeState', { get: () => ({ ready: sceneReady, fallback: sceneFailed, paused, reduced: reducedQuery.matches, rotation: state.ry, position: state.x }) });
+Object.defineProperty(host, 'prototypeState', { configurable: true, get: () => ({ ready: sceneReady, fallback: sceneFailed, paused, reduced: reducedQuery.matches, rotation: state.ry, position: state.x }) });

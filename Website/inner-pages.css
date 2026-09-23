@@ -611,3 +611,6 @@
   .inner-page .merch-status__visual img,
   .events-hero__date-card::after { transition: none; animation: none; }
 }
+
+/* Let section content use the space previously occupied by repeated labels. */
+.inner-page .section-grid > :only-child { grid-column: 1 / -1; }

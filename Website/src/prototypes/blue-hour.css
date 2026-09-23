@@ -154,3 +154,10 @@
 .static-motion .blue-hour-home .stage { position: relative; }
 .static-motion .blue-hour-home .progress, .static-motion .blue-hour-home .chapters { display: none; }
 .blue-hour-home .stage__scene canvas:focus-visible { outline: 2px solid #d9ff43; outline-offset: -8px; }
+
+/* Hold the sculpture behind the paper as the hero leaves the viewport. */
+.blue-hour-home--carry .stage { overflow: visible; }
+.blue-hour-home--carry .stage__scene { position: fixed; inset: 0 0 auto; height: 100svh; min-height: 640px; }
+@media (max-width: 600px) {
+  .blue-hour-home--carry .stage__scene { min-height: 700px; }
+}

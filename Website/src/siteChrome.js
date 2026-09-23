@@ -39,12 +39,11 @@ export const renderSiteChrome = () => {
       <div class="wrap">
         <div class="footer__top">
           <div>
-            <p class="eyebrow">PHS DECA · Parsippany High School</p>
-            <h2 class="contact__headline">Meet the<br /><span class="blue">next room.</span></h2>
+            <h2 class="contact__headline">Contact<br /><span class="blue">PHS DECA.</span></h2>
           </div>
           <div class="footer__action">
-            <p>Questions about joining, event formats, dates, or chapter updates?</p>
-            <a class="button button--solid" href="${chapterMailto('PHS DECA question')}">Contact the chapter team <span aria-hidden="true">↗</span></a>
+            <p>Want to join or have a question about events? Get in touch with our officers.</p>
+            <a class="button button--solid" href="${chapterMailto('PHS DECA question')}">Contact our officers <span aria-hidden="true">↗</span></a>
             <div class="footer__links" aria-label="Footer navigation">
               <a href="./events.html">Events</a>
               <a href="./resources.html">Resources</a>

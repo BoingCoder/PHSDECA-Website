@@ -126,19 +126,22 @@ export function makeRollingPath(geometry, rotation) {
 export function makeReferenceMaterial(texture) {
   return new THREE.ShaderMaterial({
     name: 'ReferenceMetal',
-    uniforms: { uReference: { value: texture }, uLighting: { value: 1 } },
+    uniforms: { uReference: { value: texture }, uLighting: { value: 1 }, uDaylight: { value: 0 } },
     vertexShader: `
       attribute vec3 referenceUv;
       varying vec3 vReferenceUv;
+      varying vec3 vViewNormal;
       void main() {
         vReferenceUv = referenceUv;
+        vViewNormal = normalize(normalMatrix * normal);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
       }
     `,
     fragmentShader: `
       uniform sampler2D uReference;
-      uniform float uLighting;
+      uniform float uLighting, uDaylight;
       varying vec3 vReferenceUv;
+      varying vec3 vViewNormal;
       void main() {
         vec3 metal = texture2D(uReference, vReferenceUv.xy/vReferenceUv.z).rgb;
         vec2 pixel = (vReferenceUv.xy/vReferenceUv.z)*vec2(1499.,940.);
@@ -149,8 +152,13 @@ export function makeReferenceMaterial(texture) {
         float rim = exp(-edgeDistance*edgeDistance/.81);
         float blue = metal.b-max(metal.r,metal.g)*1.8;
         float seam = smoothstep(.35,.75,blue);
-        metal += vec3(.002,.018,1.2)*seam;
-        metal += vec3(.003,.1,1.8)*rim;
+        // The photographed finish contains blue light, so relight it alongside
+        // the physical side walls while keeping the same texture and geometry.
+        float luminance = dot(metal,vec3(.2126,.7152,.0722));
+        float softLight = .65+.35*max(dot(normalize(vViewNormal),normalize(vec3(-.4,.7,1.))),0.);
+        vec3 neutral = vec3(luminance)*vec3(1.14,1.12,1.08)+vec3(.035)*softLight;
+        metal = mix(metal,neutral,uDaylight*.9);
+        metal += (vec3(.002,.018,1.2)*seam+vec3(.003,.1,1.8)*rim)*(1.-uDaylight*.9);
         gl_FragColor = vec4(metal*uLighting,1.);
       }
     `,

@@ -60,7 +60,7 @@ if (archive) {
     <article class="archive-card reveal-child">
       <figure class="archive-card__image"><img src="${escapeHTML(event.image)}" alt="${escapeHTML(event.alt)}" loading="lazy" decoding="async" /></figure>
       <div class="archive-card__body">
-        <div class="event-row__meta"><span>${escapeHTML(event.date)}</span><span>Chapter archive</span></div>
+        <div class="event-row__meta"><span>${escapeHTML(event.date)}</span></div>
         <h2>${escapeHTML(event.title.replace(/\s*·\s*(photo record|chapter photo)$/i, ''))}</h2>
         <p>${escapeHTML(event.alt)}</p>
         <span class="archive-card__index">${String(index + 1).padStart(2, '0')}</span>
@@ -95,7 +95,7 @@ if (nextEventCard && nextEvent) {
     <a class="button button--solid" href="${escapeHTML(nextEvent.href)}"${externalAttributes(nextEvent.href)}>${escapeHTML(nextEvent.action)} <span aria-hidden="true">↗</span></a>
   `;
 } else if (nextEventCard) {
-  nextEventCard.innerHTML = '<p class="events-hero__date-empty">No published dates yet. Check back with the chapter advisor.</p>';
+  nextEventCard.innerHTML = '<p class="events-hero__date-empty">No dates have been posted yet. Ask our officers what’s coming up.</p>';
 }
 
 const calendar = document.querySelector('[data-event-calendar]');
@@ -180,9 +180,9 @@ if (calendar) {
       <div class="calendar-details__heading">
         <p class="calendar-overline">Selected date</p>
         <h3>${escapeHTML(formatLongDate(selectedDate))}</h3>
-        <p>${dateEvents.length ? `${dateEvents.length} ${dateEvents.length === 1 ? 'event' : 'events'} on this date` : 'No published dates on this day.'}</p>
+        <p>${dateEvents.length ? `${dateEvents.length} ${dateEvents.length === 1 ? 'event' : 'events'} on this date` : 'No events are listed for this date.'}</p>
       </div>
-      <div class="calendar-details__events">${dateEvents.length ? dateEvents.map(eventCard).join('') : '<p class="calendar-empty">Choose a marked date to see event details.</p>'}</div>
+      <div class="calendar-details__events">${dateEvents.length ? dateEvents.map(eventCard).join('') : '<p class="calendar-empty">Select a marked date to see what’s happening.</p>'}</div>
     `;
   };
 
@@ -190,7 +190,7 @@ if (calendar) {
     const events = visibleUndatedEvents();
     undatedPanel.hidden = events.length === 0;
     undatedPanel.innerHTML = events.length ? `
-      <div class="calendar-undated__heading"><div><p class="calendar-overline">Not placed on a date</p><h3>Awaiting confirmation</h3></div><span class="event-status event-status--pending">PHS date pending</span></div>
+      <div class="calendar-undated__heading"><div><h3>Dates to be announced</h3></div></div>
       <div class="calendar-undated__events">${events.map(eventCard).join('')}</div>
     ` : '';
   };

@@ -19,6 +19,8 @@
 .inner-page .inner-hero__copy { min-width: 0; }
 .inner-page .inner-hero .display,
 .inner-page .inner-hero__copy .display { max-width: 8.5ch; margin-top: 1rem; font-size: clamp(4rem, 8.3vw, 9.4rem); }
+.inner-page .inner-hero--resources .inner-hero__copy { container-type: inline-size; }
+.inner-page .inner-hero--resources .inner-hero__copy .display { max-width: none; font-size: clamp(2.25rem, 13cqw, 8.5rem); }
 .inner-page .shop-hero .display { max-width: none; font-size: clamp(3rem, 5.4vw, 6rem); letter-spacing: -.07em; }
 .inner-page .inner-hero .hero-side { align-self: end; padding: 0 0 .6rem; }
 .inner-page .inner-hero__visual {

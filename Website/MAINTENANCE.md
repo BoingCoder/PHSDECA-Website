@@ -5,7 +5,8 @@ The public site uses the static HTML pages in `Website/`. The homepage keeps the
 ## Update confirmed content
 
 - `data/events.js` contains the upcoming NJ DECA dates and the supplied photo archive. Keep PHS-specific dates marked pending until the advisor confirms the exact date, time, location, and action. Association dates should link to the source calendar.
-- `index.html` contains the chapter overview, supplied photography, and the officer-roster pending state. Add names and roles only after the chapter confirms the current school year roster.
+- `index.html` contains the chapter overview, supplied photography, and the board section.
+- `data/board.js` contains the confirmed 2026–27 board roster. Replace each empty `bio` and add entries to its `awards` array only when verified. The homepage renders a placeholder for missing details. Board portraits are local files in `public/images/board/`, cropped from the [chapter's Instagram board announcement](https://www.instagram.com/parhighdeca/p/Dc2epXXDgBX/).
 - `join.html` contains the current public New Jersey eligibility and dues summary. Recheck the official NJ DECA profile before changing the amount or course requirements.
 - `resources.html` links to official DECA competition guidance and DECA+. Do not copy DECA+ exams, scenarios, written samples, or other licensed material into this repository.
 - `shop.html` is intentionally a forthcoming state. Add a product only when the chapter has a confirmed mockup, price, sizes, order window, pickup details, and a real destination for interest or ordering.

@@ -1,8 +1,10 @@
 import { initSmoothScroll } from './src/smoothScroll.js';
 import { gsap, ScrollTrigger } from './src/motion.js';
 import { renderSiteChrome } from './src/siteChrome.js';
+import { renderBoard } from './data/board.js';
 
 renderSiteChrome();
+renderBoard();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (selector, scope = document) => scope.querySelector(selector);

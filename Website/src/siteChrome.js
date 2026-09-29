@@ -2,6 +2,7 @@ import { chapterMailto } from '../contact.js';
 
 const navItems = [
   { href: './index.html', label: 'Home', page: 'home' },
+  { href: './index.html#board', label: 'About us', page: 'board' },
   { href: './events.html', label: 'Events', page: 'events' },
   { href: './resources.html', label: 'Resources', page: 'resources' },
   { href: './shop.html', label: 'Merch', page: 'shop' },
@@ -45,6 +46,7 @@ export const renderSiteChrome = () => {
             <p>Want to join or have a question about events? Get in touch with our officers.</p>
             <a class="button button--solid" href="${chapterMailto('PHS DECA question')}">Contact our officers <span aria-hidden="true">↗</span></a>
             <div class="footer__links" aria-label="Footer navigation">
+              <a href="./index.html#board">About us</a>
               <a href="./events.html">Events</a>
               <a href="./resources.html">Resources</a>
               <a href="./join.html">Join</a>
